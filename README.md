@@ -88,7 +88,7 @@ Below are all possible values of the defect complexity:
 
  ![image](https://github.com/amondal8/marters-thesis/assets/134355254/36d5dd9a-156c-4df7-9516-a12f0dd06841)
 
-**12.	Defect_priority: **This table contains all the possible priorities of the defects. This table has a set of predefined values identified by their ids.
+**12.	Defect_priority:** This table contains all the possible priorities of the defects. This table has a set of predefined values identified by their ids.
 Primary Key: defect_priority_id
 
  ![image](https://github.com/amondal8/marters-thesis/assets/134355254/1552287d-864b-4136-83ac-ddced02d9d38)
@@ -114,7 +114,7 @@ Primary Key: resource_id
 
 *_*Creating Instance data:**_
 
-**1.	Userstory_insttable: **I have combined the userstory table, release table and the userstory value table to create the instance table for user story. 
+**1.	Userstory_insttable:** I have combined the userstory table, release table and the userstory value table to create the instance table for user story. 
 The structure of the table:
 
  ![image](https://github.com/amondal8/marters-thesis/assets/134355254/b9831047-6a64-4908-b74a-a7a80b08270e)
@@ -126,7 +126,7 @@ Below is the snap of the data in the table:
 The mapping of the release id and the userstoryvalues with the user stories is done on a random manner. The user controls the number of user stories they want for the nth release(release_id = 2 in this case) and the previous releases(release_id = 1 in this case). The us_points and us_businessvalue are assigned randomly to the user stories. We can also intake other columns from the user story table, but since they are of no significance in our current implementation I have not inserted them into this instance table.
 
 
-2.	Testcase_insttable: In progress creating the instance table for the test cases. 
-3.	Defect_insttable: In progress creating the instance table for the defects. 
+**2.	Testcase_insttable:** In progress creating the instance table for the test cases. 
+**3.	Defect_insttable:** In progress creating the instance table for the defects. 
 
 Once the instance tables are created I will do the required mapping between these tables and create the sub set of test cases that will be selected as the RTS TC set.
