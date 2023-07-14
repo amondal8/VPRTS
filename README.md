@@ -130,3 +130,8 @@ The mapping of the release id and the userstoryvalues with the user stories is d
 **3.	Defect_insttable:** In progress creating the instance table for the defects. 
 
 Once the instance tables are created I will do the required mapping between these tables and create the sub set of test cases that will be selected as the RTS TC set.
+
+**ER Diagram**
+
+![Copy of Flow Diagrams-ER_diagram](https://github.com/amondal8/marters-thesis/assets/134355254/c9e48689-c9f4-4484-99a5-ecda0c957031)
+
