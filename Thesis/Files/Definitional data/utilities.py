@@ -148,6 +148,12 @@ def creating_prioritydict_tclist(tc_list, track_id):
   return sorted_tcdict
 
 
+def createlist_fromdbresult(res, valuecol):
+  my_list = []
+  for ind, i in enumerate(res):
+    my_list.append(res[ind][valuecol])
+  return my_list
+
 # creating_prioritydict_tclist(["TC1", "TC2"], "1")
 
 # us_lst = [1,2,3,4]

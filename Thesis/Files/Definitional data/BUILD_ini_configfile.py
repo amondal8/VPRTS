@@ -44,6 +44,8 @@ config.set('data', 'defect_totalcount', '10')
 config.set('data', 'usp_threshold', '0')
 config.set('data', 'tc_prefix', 'TC')
 config.set('data', 'defect_prefix', 'D')
+config.set('data', 'release1', '1')
+config.set('data', 'release2', '2')
 
 with open('config1.ini', 'w') as config_file:
     config.write(config_file)

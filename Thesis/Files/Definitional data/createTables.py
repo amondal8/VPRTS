@@ -41,16 +41,14 @@ def tablecreation_releasedata(table_name):
   return f"""CREATE TABLE {table_name}(
                 release_id INT PRIMARY KEY,
                 start_date DATE DEFAULT NULL,
-                end_date DATE DEFAULT NULL,
-                UNIQUE(release_id, start_date, end_date));"""
+                end_date DATE DEFAULT NULL);"""
 
 
 def tablecreation_sprintdata(table_name):
   return f"""CREATE TABLE {table_name}(
                 sprint_id INT PRIMARY KEY,
                 start_date DATE DEFAULT NULL,
-                end_date DATE DEFAULT NULL,
-                UNIQUE (sprint_id, start_date, end_date));"""
+                end_date DATE DEFAULT NULL);"""
 
 
 
