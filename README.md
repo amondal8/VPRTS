@@ -1,10 +1,14 @@
 # marters-thesis
 Definitional Data Description:
 1.	Code Module: This will contain all the code modules that have been affected by the test cases. The mapping between the code modules and the test cases will be done while creating the instance data tables.
- 
+
+ ![image](https://github.com/amondal8/marters-thesis/assets/134355254/5fd6a618-5ede-4819-a335-55ec05904861)
+
 2.	Userstory: This table contains all the user stories and their respective ids.
 Primary key: us_id
- 
+
+ ![image](https://github.com/amondal8/marters-thesis/assets/134355254/0fc77175-bf06-4f68-b155-b30dd572f487)
+
 Snap of the data is given below:
  
 3.	Userstoryvalue: This table contains the user story points and the business value for the user stories. This will be mapped to the user stories while creating the instance data table.
