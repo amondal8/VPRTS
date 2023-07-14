@@ -1,5 +1,5 @@
 # marters-thesis
-Definitional Data Description:
+**Definitional Data Description:**
 **1.	Code Module:** This will contain all the code modules that have been affected by the test cases. The mapping between the code modules and the test cases will be done while creating the instance data tables.
 
  ![image](https://github.com/amondal8/marters-thesis/assets/134355254/5fd6a618-5ede-4819-a335-55ec05904861)
@@ -112,7 +112,7 @@ Primary Key: resource_id
 ![image](https://github.com/amondal8/marters-thesis/assets/134355254/27a3becd-0099-4095-9b2d-0bb90b5c433c)
 
 
-*_*Creating Instance data:**_
+**Creating Instance data:**
 
 **1.	Userstory_insttable:** I have combined the userstory table, release table and the userstory value table to create the instance table for user story. 
 The structure of the table:
