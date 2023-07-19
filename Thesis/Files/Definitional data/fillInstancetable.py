@@ -2,14 +2,18 @@ import random
 
 import mysql.connector
 import configparser
+import utilities_dataset as ut_ds
 import utilities as ut
+from datetime import datetime
 # import fill_primarytables as currid
 
 config = configparser.ConfigParser()
 config.read('config1.ini')
-dbconnect = config['dbconnection']
+dbconnect = config['dbconnection_dataset']
 configuration = config['configuration']
 data = config['data']
+run_config = config['run_configuration']
+tablenames_config = config['tablenames']
 
 mydb = mysql.connector.connect(
   host=dbconnect["host"],
@@ -18,19 +22,48 @@ mydb = mysql.connector.connect(
   database=dbconnect["database"]
 )
 
+
+dataset_tablename = tablenames_config["dataset_tablename"]
+usdataset_tablename = tablenames_config["usdatasettable_tablename"]
+tcdataset_tablename = tablenames_config["tcdatasettable_tablename"]
+defectdataset_tablename = tablenames_config["defectdatasettable_tablename"]
+
 rel1 = data['release1'].split(',')
 rel2 = data['release2'].split(',')
 uscount_r1 = 10
 uscount_r2 = 10
+tc_count = int(data['tc_totalcount'])
 usselection_config = "random"   #random or serialized
 # tablecreation_config = configuration['tablecreate_config']
+
+config_type = run_config['run_config']
+if config_type == "new":
+  curr_id = ut_ds.getds_id()
+  if curr_id is None:
+    next_id = 1
+  else:
+    print(f"curr id: {curr_id}")
+    next_id = int(curr_id)+1
+  current_datetime = datetime.now()
+  formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+  cols=["ds_id", "run_config", "timestamp"]
+  vals = [next_id, config_type, formatted_datetime]
+  datatype = ["str", "str", "str"]
+  query = ut_ds.insertquery_creation(dataset_tablename, cols, vals, datatype)
+  ut_ds.running_insertquery(query)
+  print("Finished insert query")
+
+elif config_type == "old":
+  config_copiedfrom = run_config["config_copiedfrom"]
+
+else:
+  print(f"Wrong input for config_type == {config_type}")
 
 def fillinsttable_usstory():
   usr1count_flag = 0
   usr2count_flag = 0
-  tablename_usinstance = "userstory_insttable"
-  cols = ['us_id', 'us_desc', 'release_id', 'us_points', 'us_businessvalue']
-  dtype = ['int', 'str', 'int','int','int']
+  cols = ['ds_id', 'us_id', 'us_desc', 'release_id', 'us_points', 'us_businessvalue']
+  dtype = ['str', 'int', 'str', 'int', 'int', 'int']
   query_usid = "select us_id, us_desc from userstory;"
   query_releaseid = "select release_id from release_data"
   query_usp = "select us_points,us_businessvalue from userstoryvalue"
@@ -70,8 +103,8 @@ def fillinsttable_usstory():
   usplist_rel2 = ut.createlist_fromdbresult(usvlist_rel2, 0)
   usbvlist_rel2 = ut.createlist_fromdbresult(usvlist_rel2, 1)
 
-  insertingvalue_usinsttable(usidlist_rel1, usdesclist_rel1, rel1, usplist_rel1, usbvlist_rel1, tablename_usinstance, cols, dtype)
-  insertingvalue_usinsttable(usidlist_rel2, usdesclist_rel2, rel2, usplist_rel2, usbvlist_rel2, tablename_usinstance, cols, dtype)
+  insertingvalue_usinsttable(usidlist_rel1, usdesclist_rel1, rel1, usplist_rel1, usbvlist_rel1, usdataset_tablename, cols, dtype)
+  insertingvalue_usinsttable(usidlist_rel2, usdesclist_rel2, rel2, usplist_rel2, usbvlist_rel2, usdataset_tablename, cols, dtype)
 
 
 def insertingvalue_usinsttable(usidlist, usdesclist, relid, usplist, usbvlist, tablename, cols, dtype):
@@ -83,14 +116,19 @@ def insertingvalue_usinsttable(usidlist, usdesclist, relid, usplist, usbvlist, t
     usp_val = usplist[ind]
     usbv_val = usbvlist[ind]
 
-    vals = [usid_val, usdesc_val, relid_val, usp_val, usbv_val]
-    query = ut.insertquery_creation(tablename, cols, vals, dtype)
+    vals = [next_id, usid_val, usdesc_val, relid_val, usp_val, usbv_val]
+    query = ut_ds.insertquery_creation(tablename, cols, vals, dtype)
     print(f"query is : {query}")
-    ut.running_insertquery(query)
+    ut_ds.running_insertquery(query)
 
 
-# def fillinsttable_testcase():
-
+def fillinsttable_testcase():
+  query_tcid = "select tc_id from testcase"
+  tcid_res = ut.running_searchqury(query_tcid)
+  tcid_list = ut.createlist_fromdbresult(tcid_res, 0)
+  tcidlist_total = random.sample(tcid_list, tc_count)
+  print(tcidlist_total)
 
 
 fillinsttable_usstory()
+# fillinsttable_testcase()

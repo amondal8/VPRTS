@@ -4,7 +4,7 @@ import configparser
 
 config = configparser.ConfigParser()
 config.read('config1.ini')
-dbconnect = config['dbconnection']
+dbconnect = config['dbconnection_dataset']
 
 mydb = mysql.connector.connect(
   host=dbconnect["host"],
@@ -13,10 +13,13 @@ mydb = mysql.connector.connect(
   database=dbconnect["database"]
 )
 
-filepath= "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+
+
+filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 
 def getds_id():
+  print(dbconnect["database"])
   mycursor = mydb.cursor()
   mycursor.execute("Select ds_id from dataset ORDER BY timestamp DESC LIMIT 1")
   result = mycursor.fetchone()
@@ -75,10 +78,10 @@ def insertquery_creation(tablename, collist, vallist, datatypelist):
 
 def running_insertquery(query):
   mydb = mysql.connector.connect(
-    host="127.0.0.1",
-    user="root",
-    password="Aa*231491*dD",
-    database="definitionaldata"
+    host=dbconnect["host"],
+    user=dbconnect["user"],
+    password=dbconnect["password"],
+    database=dbconnect["database"]
   )
   mycursor = mydb.cursor()
   if mydb.is_closed():
@@ -152,11 +155,6 @@ def creating_prioritydict_tclist(tc_list, track_id):
   return sorted_tcdict
 
 
-def createlist_fromdbresult(res, valuecol):
-  my_list = []
-  for ind, i in enumerate(res):
-    my_list.append(res[ind][valuecol])
-  return my_list
 
 # creating_prioritydict_tclist(["TC1", "TC2"], "1")
 

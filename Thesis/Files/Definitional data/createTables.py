@@ -74,7 +74,7 @@ def tablecreation_tcexectime(table_name):
 
 def tablecreation_defect(table_name):
   return f"""CREATE TABLE {table_name}(
-                  defect_id VARCHAR(10),
+                  defect_id VARCHAR(10) PRIMARY KEY,
                   defect_desc VARCHAR(500) DEFAULT NULL,
                   affected_version VARCHAR(50) DEFAULT NULL,
                   steps_to_reproduce VARCHAR(1000) DEFAULT NULL,

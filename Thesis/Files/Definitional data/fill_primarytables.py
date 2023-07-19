@@ -191,16 +191,16 @@ def filltable_sprintdata(sheetname):
 
 
 
-# filltable_userstory(sheetname_R1)
-# filltable_userstory(sheetname_R2)
-#
-# filltable_userstorypoints(sheetname_R1)
-# filltable_userstorypoints(sheetname_R2)
-# filltable_releasedata(sheetname_releasedata)
+filltable_userstory(sheetname_R1)
+filltable_userstory(sheetname_R2)
+
+filltable_userstorypoints(sheetname_R1)
+filltable_userstorypoints(sheetname_R2)
+filltable_releasedata(sheetname_releasedata)
 filltable_sprintdata(sheetname_sprintdata)
-# filltable_testcase()
-# filltable_defects()
-# filltable_tcrunstatus()
-# filltable_defectpriority()
-# filltable_defectseverity()
-# filltable_defectcomplexity()
+filltable_testcase()
+filltable_defects()
+filltable_tcrunstatus()
+filltable_defectpriority()
+filltable_defectseverity()
+filltable_defectcomplexity()
