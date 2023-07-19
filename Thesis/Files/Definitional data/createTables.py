@@ -17,13 +17,6 @@ mydb = mysql.connector.connect(
 tablecreation_config = configuration['tablecreate_config']
 
 
-# def tablecreation_idtracker(table_name):
-#   return f"""CREATE TABLE {table_name}(
-#               id INT Primary key,
-#               comments VARCHAR(500),
-#               timestamp DATETIME)"""
-
-
 def tablecreation_userstory(table_name):
   return f"""CREATE TABLE {table_name}(
               us_id VARCHAR(10) Primary key,
@@ -170,8 +163,12 @@ def createtables(querylist):
   mydb.start_transaction()
   mycursor = mydb.cursor()
   for ind, i in enumerate(querylist):
-    mycursor.execute(i)
-    print(f"Created table# {ind+1}")
+    try:
+      mycursor.execute(i)
+      print(f"Created table# {ind+1}")
+    except Exception as e:
+      print(f"Error while table creation with error message: {str(e)}. Moving to next table")
+      continue
   mydb.commit()
   mycursor.close()
   mydb.close()

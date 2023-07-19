@@ -62,7 +62,7 @@ def datasettablecreation_userstory(table_name):
 
 def datasettablecreation_testcase(table_name):
   return f"""CREATE TABLE {table_name}(
-              ds_id VARCHAR(10) Primary key,
+              ds_id VARCHAR(10),
               tc_id VARCHAR(10),
               tc_executiontime INT,
               tc_setuptime INT,
@@ -73,7 +73,7 @@ def datasettablecreation_testcase(table_name):
 
 def datasettablecreation_defect(table_name):
   return f"""CREATE TABLE {table_name}(
-              ds_id VARCHAR(10) Primary key,
+              ds_id VARCHAR(10),
               defect_id VARCHAR(10),
               defect_severity_id INT,
               defect_priority_id INT,

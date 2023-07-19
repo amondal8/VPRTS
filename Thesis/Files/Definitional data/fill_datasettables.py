@@ -33,6 +33,7 @@ rel2 = data['release2'].split(',')
 uscount_r1 = 10
 uscount_r2 = 10
 tc_count = int(data['tc_totalcount'])
+defect_count = int(data['defect_totalcount'])
 usselection_config = "random"   #random or serialized
 # tablecreation_config = configuration['tablecreate_config']
 
@@ -42,7 +43,6 @@ if config_type == "new":
   if curr_id is None:
     next_id = 1
   else:
-    print(f"curr id: {curr_id}")
     next_id = int(curr_id)+1
   current_datetime = datetime.now()
   formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
@@ -123,12 +123,73 @@ def insertingvalue_usinsttable(usidlist, usdesclist, relid, usplist, usbvlist, t
 
 
 def fillinsttable_testcase():
+  cols = ['ds_id', 'tc_id', 'tc_executiontime', 'tc_setuptime', 'tc_teardowntime', 'tc_additionalres']
+  dtype = ['str', 'str', 'int', 'int', 'int', 'int']
   query_tcid = "select tc_id from testcase"
+  query_tcexecutiontime = "select tc_executiontime, tc_setup, tc_teardown, tc_additionalres from tcexectime"
   tcid_res = ut.running_searchqury(query_tcid)
   tcid_list = ut.createlist_fromdbresult(tcid_res, 0)
   tcidlist_total = random.sample(tcid_list, tc_count)
-  print(tcidlist_total)
+
+  tcexectime_res = ut.running_searchqury(query_tcexecutiontime)
+  tcexectimelist_total = random.sample(tcexectime_res, tc_count)
+  tcexectime_list = ut.createlist_fromdbresult(tcexectimelist_total, 0)
+  tcsetuptime_list = ut.createlist_fromdbresult(tcexectimelist_total, 1)
+  tcteardowntime_list = ut.createlist_fromdbresult(tcexectimelist_total, 2)
+  tcaddrestime_list = ut.createlist_fromdbresult(tcexectimelist_total, 3)
+
+  insertingvalue_tcinsttable(tcid_list, tcexectime_list, tcsetuptime_list, tcteardowntime_list, tcaddrestime_list, tcdataset_tablename, cols, dtype)
 
 
-fillinsttable_usstory()
+def insertingvalue_tcinsttable(tcidlist, tcexectime_list, tcsetuptime_list, tcteardowntime_list, tcaddrestime_list, tablename, cols, dtype):
+
+  for ind, i in enumerate(tcidlist):
+    tcid_val = i
+    tcexectime_val = tcexectime_list[ind]
+    tcsetuptime_val = tcsetuptime_list[ind]
+    tcteardowntime_val = tcteardowntime_list[ind]
+    tcaddrestime_val = tcaddrestime_list[ind]
+
+    vals = [next_id, tcid_val, tcexectime_val, tcsetuptime_val, tcteardowntime_val, tcaddrestime_val]
+    query = ut_ds.insertquery_creation(tablename, cols, vals, dtype)
+    print(f"query is : {query}")
+    ut_ds.running_insertquery(query)
+
+def fillinsttable_defectinsttable():
+  cols = ['ds_id', 'defect_id', 'defect_severity_id', 'defect_priority_id', 'defect_complexity_id']
+  dtype = ['str', 'str', 'int', 'int', 'int']
+  defectid_query = "select defect_id from defect"
+  defsevid_query = "select defect_severity_id from defect_severity"
+  defpriid_query = "select defect_priority_id from defect_priority"
+  defcomid_query = "select defect_complexity_id from defect_complexity"
+
+  defid_res = ut.running_searchqury(defectid_query)
+  defid_list = ut.createlist_fromdbresult(defid_res, 0)
+  defidlist_total = random.sample(defid_list, defect_count)
+
+  defsevid_res = ut.running_searchqury(defsevid_query)
+  defsevid_list = ut.createlist_fromdbresult(defsevid_res, 0)
+
+  defpriid_res = ut.running_searchqury(defpriid_query)
+  defpriid_list = ut.createlist_fromdbresult(defpriid_res, 0)
+
+  defcomid_res = ut.running_searchqury(defcomid_query)
+  defcomid_list = ut.createlist_fromdbresult(defcomid_res, 0)
+
+  insertingvalue_definsttable(defid_list, defsevid_list, defpriid_list, defcomid_list, defectdataset_tablename, cols, dtype)
+
+def insertingvalue_definsttable(defid_list, defsev_list, defpri_list, defcom_list, tablename, cols, dtype):
+  for ind, i in enumerate(defid_list):
+    defid_val = i
+    defsevid_val = random.choice(defsev_list)
+    defpri_val = random.choice(defpri_list)
+    defcom_val = random.choice(defcom_list)
+
+    vals = [next_id, defid_val, defsevid_val, defpri_val, defcom_val]
+    query = ut_ds.insertquery_creation(tablename, cols, vals, dtype)
+    print(f"query is : {query}")
+    ut_ds.running_insertquery(query)
+
+# fillinsttable_usstory()
 # fillinsttable_testcase()
+fillinsttable_defectinsttable()

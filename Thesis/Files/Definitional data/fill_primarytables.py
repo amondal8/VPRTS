@@ -32,6 +32,8 @@ us_tablename = tablename["us_tablename"]
 usvalue_tablename = tablename["usvalue_tablename"]
 releasedata_tablename = tablename["releasedata"]
 sprintdata_tablename = tablename["sprintdata"]
+tc_tablename = tablename["tc_tablename"]
+tcexectime_tablename = tablename["tcexectime_tablename"]
 tcexecstatus_tablename = tablename["tcrunstatus_tablename"]
 defectcomplexity_tablename = tablename["defectcomplexity_tablename"]
 defectpriority_tablename = tablename["defectpriority_tablename"]
@@ -80,14 +82,15 @@ def filltable_userstorypoints(sheetname):
     print(f"query is : {query}")
     ut.running_insertquery(query)
 
-def filltable_testcase():
-  tcexectime_dict = ut.createdictfromexcel(filepath, tcexecutiontime_worksheetname, 1, 2)
+def filltable_testcase(sheetname):
+  # tcexectime_dict = ut.createdictfromexcel(filepath, tcexecutiontime_worksheetname, 1, 2)
   cols = ['tc_id']
   dtype = ['str']
 
-  for key in tcexectime_dict:
-    id_val = key
-    vals = [id_val]
+  df1 = pd.read_excel(filepath, sheet_name=sheetname)
+  for _, row in df1.iterrows():
+    tcid_val = row['tc_id']
+    vals = [tcid_val]
     query = ut.insertquery_creation(tc_tablename, cols, vals, dtype)
     print(f"query is : {query}")
     ut.running_insertquery(query)
@@ -188,19 +191,33 @@ def filltable_sprintdata(sheetname):
     ut.running_insertquery(query)
 
 
+def filltable_tcexecutiontime(sheetname):
+  cols = ["tc_executiontime", "tc_setup", "tc_teardown", "tc_additionalres"]
+  dtype = ["int", "int", "int", "int"]
+
+  df1 = pd.read_excel(filepath, sheet_name = sheetname)
+  for _, row in df1.iterrows():
+    tcexectime_val = row['tc_executiontime']
+    tcstartuptime_val = row['tc_setup']
+    tcteardowntime_val = row['tc_teardown']
+    tcaddrestime_val = row['tc_additionalres']
+    vals = [tcexectime_val, tcstartuptime_val, tcteardowntime_val, tcaddrestime_val]
+    query = ut.insertquery_creation(tcexectime_tablename, cols, vals, dtype)
+    print(f"query is : {query}")
+    ut.running_insertquery(query)
 
 
+# filltable_userstory(sheetname_R1)
+# filltable_userstory(sheetname_R2)
 
-filltable_userstory(sheetname_R1)
-filltable_userstory(sheetname_R2)
-
-filltable_userstorypoints(sheetname_R1)
-filltable_userstorypoints(sheetname_R2)
-filltable_releasedata(sheetname_releasedata)
-filltable_sprintdata(sheetname_sprintdata)
-filltable_testcase()
-filltable_defects()
-filltable_tcrunstatus()
-filltable_defectpriority()
-filltable_defectseverity()
-filltable_defectcomplexity()
+# filltable_userstorypoints(sheetname_R1)
+# filltable_userstorypoints(sheetname_R2)
+# filltable_releasedata(sheetname_releasedata)
+# filltable_sprintdata(sheetname_sprintdata)
+filltable_testcase(tcexecutiontime_worksheetname)
+# filltable_defects()
+# filltable_tcrunstatus()
+# filltable_defectpriority()
+# filltable_defectseverity()
+# filltable_defectcomplexity()
+# filltable_tcexecutiontime(tcexecutiontime_worksheetname)
