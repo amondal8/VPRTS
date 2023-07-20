@@ -2,10 +2,6 @@ import configparser
 
 config = configparser.ConfigParser()
 
-config.add_section('tablecreation')
-config.set('tablecreation', 'creation_config','new')
-
-
 config.add_section('dbconnection')
 config.set('dbconnection', 'host','127.0.0.1')
 config.set('dbconnection', 'user','root')
@@ -18,9 +14,6 @@ config.set('dbconnection_dataset', 'user','root')
 config.set('dbconnection_dataset', 'password','Aa*231491*dD')
 config.set('dbconnection_dataset', 'database','dataset_schema')
 
-config.add_section('configuration')
-config.set('configuration', 'tablecreate_config', 'new')
-config.set('configuration', 'comments', 'This is for testing purpose')
 config.add_section('tablenames')
 config.set('tablenames', 'us_tablename', 'userstory')
 config.set('tablenames', 'usvalue_tablename', 'userstoryvalue')
@@ -43,6 +36,7 @@ config.set('tablenames', 'dataset_tablename', 'dataset')
 config.set('tablenames', 'usdatasettable_tablename', 'userstory_datasettable')
 config.set('tablenames', 'tcdatasettable_tablename', 'tc_datasettable')
 config.set('tablenames', 'defectdatasettable_tablename', 'defect_datasettable')
+config.set('tablenames', 'cmdatasettable_tablename', 'cm_datasettable')
 config.set('tablenames', 'ustcmap_tablename', 'us_tc_map')
 config.set('tablenames', 'uscmmap_tablename', 'us_cm_map')
 config.set('tablenames', 'tcdefectmap_tablename', 'tc_defect_map')
@@ -54,14 +48,23 @@ config.set('run_configuration', 'config_copiedfrom', 'null')
 
 
 config.add_section('data')
-config.set('data', 'us_totalcount', '10')
-config.set('data', 'tc_totalcount', '20')
+config.set('data', 'usp_threshold', '0')
+config.set('data', 'us_totalcount', '20')
+config.set('data', 'uscount_r1', '10')
+config.set('data', 'uscount_r2', '10')
+config.set('data', 'cm_totalcount', '10')
+config.set('data', 'tc_totalcount', '40')
 config.set('data', 'defect_totalcount', '10')
 config.set('data', 'usp_threshold', '0')
 config.set('data', 'tc_prefix', 'TC')
 config.set('data', 'defect_prefix', 'D')
 config.set('data', 'release1', '1')
 config.set('data', 'release2', '2')
+config.set('data', 'limiting_ones', '6')
+config.set('data', 'similarityval_threshold', '.80')
+config.set('data', 'total_executiontime', '90')
+config.set('data', 'tcexectime_fixed', '15')
+
 
 with open('config1.ini', 'w') as config_file:
     config.write(config_file)

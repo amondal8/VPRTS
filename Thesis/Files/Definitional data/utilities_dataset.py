@@ -69,13 +69,6 @@ def stringcreation_values(my_list, datatype_list):
   return my_str
 
 
-def insertquery_creation(tablename, collist, vallist, datatypelist):
-  cols = stringcreation_columns(collist)
-  vals = stringcreation_values(vallist, datatypelist)
-  query = f"""INSERT INTO {tablename} {cols} VALUES {vals}"""
-  return query
-
-
 def running_insertquery(query):
   mydb = mysql.connector.connect(
     host=dbconnect["host"],
@@ -119,17 +112,6 @@ def fetch_ones_in_row(adjacency_matrix, row_index):
   return ones_indices
 
 
-def create_searchquery(us_list, colname, tablename, searchcolname, track_id, prefix):
-  us_str = ""
-  for ind, i in enumerate(us_list):
-    if ind == len(us_list)-1:
-      us_str = us_str + "\"" + prefix + str(i) +"\""
-    else:
-      us_str = us_str+"\"" + prefix + str(i) + "\","
-  query = f"""SELECT DISTINCT {colname} from {tablename} where {searchcolname} in ({us_str}) and track_id = {track_id}"""
-  print(query)
-  return query
-
 def running_searchqury(query):
   mycursor = mydb.cursor()
   mycursor.execute(query)
@@ -137,18 +119,27 @@ def running_searchqury(query):
   # print(result)
   return result
 
-def create_fetchquery(tc_id, track_id):
-  query = f"""Select sum(us_points) from user_story where us_id in(SELECT DISTINCT us_id from us_tc_map where tc_id in ("{tc_id}") and track_id = {track_id}) and track_id = {track_id}"""
+def create_fetchquery_usvalue(colname, tc_id, ds_id):
+  query = f"""Select sum({colname}) from userstory_datasettable where us_id in(SELECT DISTINCT us_id from us_tc_map where tc_id in ("{tc_id}") and ds_id = {ds_id}) and ds_id = {ds_id}"""
+  # print(query)
   return query
 
 
-def creating_prioritydict_tclist(tc_list, track_id):
+def create_fetchquery_tcexectime(colname, tc_id, ds_id):
+  query = f"""SELECT {colname} from tc_datasettable where tc_id = "{tc_id}" and ds_id = "{ds_id}"; """
+  print(query)
+  return query
+
+
+def creating_prioritydict_tclist(tc_list, ds_id):
   tc_dict = {}
   for ind, i in enumerate(tc_list):
-    query = create_fetchquery(i, track_id)
+    query_usp = create_fetchquery_usvalue("us_points", i, ds_id)
+    query_usbv = create_fetchquery_usvalue("us_businessvalue", i, ds_id)
     # print(query)
-    result = running_searchqury(query)
-    tc_dict[i] = int(result[0][0])
+    result1 = running_searchqury(query_usp)
+    result2 = running_searchqury(query_usbv)
+    tc_dict[i] = int(result1[0][0]) + int(result2[0][0])
   sorted_tcdict = dict(sorted(tc_dict.items(), key=lambda x: x[1], reverse=True))
   print(f"Printing the selected tc set with usp: {tc_dict}")
   print(f"Printing the selected set in decreasing order of usp: {sorted_tcdict}")

@@ -30,6 +30,7 @@ dataset_tablename = tablenames_config["dataset_tablename"]
 usdatasettable_tablename = tablenames_config["usdatasettable_tablename"]
 tcdatasettable_tablename = tablenames_config["tcdatasettable_tablename"]
 defectdatasettable_tablename = tablenames_config["defectdatasettable_tablename"]
+cmdatasettable_tablename = tablenames_config["cmdatasettable_tablename"]
 ustcmap_tablename = tablenames_config["ustcmap_tablename"]
 tcdefectmap_tablename = tablenames_config["tcdefectmap_tablename"]
 uscmmap_tablename = tablenames_config["uscmmap_tablename"]
@@ -46,7 +47,8 @@ def datasettablecreation_dataset(table_name):   #run_config values will be "new"
               algorithm VARCHAR(200),
               parameters VARCHAR(1000),
               environment VARCHAR(100),
-              results VARCHAR(500));"""
+              results VARCHAR(500)
+              ini_file BLOB);"""
 
 
 def datasettablecreation_userstory(table_name):
@@ -81,6 +83,14 @@ def datasettablecreation_defect(table_name):
               FOREIGN KEY (defect_id) REFERENCES {definitional_database}.{defect_tablename} (defect_id));"""
 
 
+def datasettablecreation_cm(table_name):
+  return f"""CREATE TABLE {table_name}(
+              ds_id VARCHAR(10),
+              cm_id VARCHAR(10),
+              release_id INT,
+              FOREIGN KEY (cm_id) REFERENCES {definitional_database}.{codemodule_tablename} (cm_id));"""
+
+
 def datasettablecreation_tcmap(table_name):
   return f"""CREATE TABLE {table_name}(
                     us_id VARCHAR(10),
@@ -93,7 +103,7 @@ def datasettablecreation_cmmap(table_name):
   return f"""CREATE TABLE {table_name}(
                     us_id VARCHAR(10),
                     cm_id VARCHAR(10),
-                    affected_value INT,
+                    affected_value VARCHAR(50),
                     ds_id VARCHAR(10),
                     PRIMARY KEY(us_id, cm_id, ds_id));"""
 
@@ -110,13 +120,14 @@ query1 = datasettablecreation_dataset(dataset_tablename)
 query2 = datasettablecreation_userstory(usdatasettable_tablename)
 query3 = datasettablecreation_testcase(tcdatasettable_tablename)
 query4 = datasettablecreation_defect(defectdatasettable_tablename)
-query5 = datasettablecreation_tcmap(ustcmap_tablename)
-query6 = datasettablecreation_cmmap(tcdefectmap_tablename)
-query7 = datasettablecreation_defectmap(uscmmap_tablename)
+query5 = datasettablecreation_cm(cmdatasettable_tablename)
+query6 = datasettablecreation_tcmap(ustcmap_tablename)
+query7 = datasettablecreation_cmmap(uscmmap_tablename)
+query8 = datasettablecreation_defectmap(tcdefectmap_tablename)
 
 
 
-querylist = [query1, query2, query3, query4, query5, query6, query7]
+querylist = [query1, query2, query3, query4, query5, query6, query7, query8]
 
 def createtables(querylist):
   mydb.start_transaction()
@@ -126,7 +137,7 @@ def createtables(querylist):
       mycursor.execute(i)
       print(f"Created table# {ind+1}")
     except Exception as e:
-      print(f"Error while table creation with error message: {str(e)}. Moving to next table")
+      print(f"Query {ind+1} Error while table creation with error message: {str(e)}. Moving to next table")
       continue
   mydb.commit()
   mycursor.close()

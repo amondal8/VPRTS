@@ -10,7 +10,6 @@ from datetime import datetime
 config = configparser.ConfigParser()
 config.read('config1.ini')
 dbconnect = config['dbconnection_dataset']
-configuration = config['configuration']
 data = config['data']
 run_config = config['run_configuration']
 tablenames_config = config['tablenames']
@@ -27,15 +26,17 @@ dataset_tablename = tablenames_config["dataset_tablename"]
 usdataset_tablename = tablenames_config["usdatasettable_tablename"]
 tcdataset_tablename = tablenames_config["tcdatasettable_tablename"]
 defectdataset_tablename = tablenames_config["defectdatasettable_tablename"]
+cmdatasettable_tablename = tablenames_config["cmdatasettable_tablename"]
 
 rel1 = data['release1'].split(',')
 rel2 = data['release2'].split(',')
-uscount_r1 = 10
-uscount_r2 = 10
+uscount_r1 = int(data['uscount_r1'])
+uscount_r2 = int(data['uscount_r2'])
+cm_count = int(data['cm_totalcount'])
 tc_count = int(data['tc_totalcount'])
 defect_count = int(data['defect_totalcount'])
 usselection_config = "random"   #random or serialized
-# tablecreation_config = configuration['tablecreate_config']
+# next_id = 1
 
 config_type = run_config['run_config']
 if config_type == "new":
@@ -49,7 +50,7 @@ if config_type == "new":
   cols=["ds_id", "run_config", "timestamp"]
   vals = [next_id, config_type, formatted_datetime]
   datatype = ["str", "str", "str"]
-  query = ut_ds.insertquery_creation(dataset_tablename, cols, vals, datatype)
+  query = ut.insertquery_creation(dataset_tablename, cols, vals, datatype)
   ut_ds.running_insertquery(query)
   print("Finished insert query")
 
@@ -60,8 +61,7 @@ else:
   print(f"Wrong input for config_type == {config_type}")
 
 def fillinsttable_usstory():
-  usr1count_flag = 0
-  usr2count_flag = 0
+
   cols = ['ds_id', 'us_id', 'us_desc', 'release_id', 'us_points', 'us_businessvalue']
   dtype = ['str', 'int', 'str', 'int', 'int', 'int']
   query_usid = "select us_id, us_desc from userstory;"
@@ -70,14 +70,7 @@ def fillinsttable_usstory():
   usid_res = ut.running_searchqury(query_usid)
   relid_res = ut.running_searchqury(query_releaseid)
   usv_res = ut.running_searchqury(query_usp)
-  usdesclist_rel1 = []
-  usdesclist_rel12 = []
 
-  usid_list = ut.createlist_fromdbresult(usid_res,0)
-  usdesc_list = ut.createlist_fromdbresult(usid_res,1)
-  relid_list = ut.createlist_fromdbresult(relid_res,0)
-  usp_list = ut.createlist_fromdbresult(usv_res,0)
-  usbv_list = ut.createlist_fromdbresult(usv_res, 1)
 
   uslist_rel1 = random.sample(usid_res,uscount_r1)
 
@@ -117,7 +110,7 @@ def insertingvalue_usinsttable(usidlist, usdesclist, relid, usplist, usbvlist, t
     usbv_val = usbvlist[ind]
 
     vals = [next_id, usid_val, usdesc_val, relid_val, usp_val, usbv_val]
-    query = ut_ds.insertquery_creation(tablename, cols, vals, dtype)
+    query = ut.insertquery_creation(tablename, cols, vals, dtype)
     print(f"query is : {query}")
     ut_ds.running_insertquery(query)
 
@@ -138,7 +131,9 @@ def fillinsttable_testcase():
   tcteardowntime_list = ut.createlist_fromdbresult(tcexectimelist_total, 2)
   tcaddrestime_list = ut.createlist_fromdbresult(tcexectimelist_total, 3)
 
-  insertingvalue_tcinsttable(tcid_list, tcexectime_list, tcsetuptime_list, tcteardowntime_list, tcaddrestime_list, tcdataset_tablename, cols, dtype)
+  print(f"tc len: {len(tcidlist_total)} and list: {tcidlist_total}")
+  print(f"tctime len: {len(tcexectime_list)} and list: {tcexectime_list}")
+  insertingvalue_tcinsttable(tcidlist_total, tcexectime_list, tcsetuptime_list, tcteardowntime_list, tcaddrestime_list, tcdataset_tablename, cols, dtype)
 
 
 def insertingvalue_tcinsttable(tcidlist, tcexectime_list, tcsetuptime_list, tcteardowntime_list, tcaddrestime_list, tablename, cols, dtype):
@@ -151,7 +146,7 @@ def insertingvalue_tcinsttable(tcidlist, tcexectime_list, tcsetuptime_list, tcte
     tcaddrestime_val = tcaddrestime_list[ind]
 
     vals = [next_id, tcid_val, tcexectime_val, tcsetuptime_val, tcteardowntime_val, tcaddrestime_val]
-    query = ut_ds.insertquery_creation(tablename, cols, vals, dtype)
+    query = ut.insertquery_creation(tablename, cols, vals, dtype)
     print(f"query is : {query}")
     ut_ds.running_insertquery(query)
 
@@ -186,10 +181,37 @@ def insertingvalue_definsttable(defid_list, defsev_list, defpri_list, defcom_lis
     defcom_val = random.choice(defcom_list)
 
     vals = [next_id, defid_val, defsevid_val, defpri_val, defcom_val]
-    query = ut_ds.insertquery_creation(tablename, cols, vals, dtype)
+    query = ut.insertquery_creation(tablename, cols, vals, dtype)
     print(f"query is : {query}")
     ut_ds.running_insertquery(query)
 
-# fillinsttable_usstory()
-# fillinsttable_testcase()
+
+def fillinsttable_cminsttable():
+  cols = ['ds_id', 'cm_id', 'release_id']
+  dtype = ['str', 'str', 'int']
+
+  total_relid = data['release1'] + "," + data['release2']
+  rel_id = total_relid.split(",")
+  cmid_query = "select cm_id from code_module"
+  cmid_res = ut.running_searchqury(cmid_query)
+  cmid_list = ut.createlist_fromdbresult(cmid_res, 0)
+  cmlist_final = random.sample(cmid_list, cm_count)
+  print(cmlist_final)
+  insertingvalue_cminsttable(cmlist_final, rel_id, cmdatasettable_tablename, cols, dtype)
+
+
+def insertingvalue_cminsttable(cmlist_final, rel_id, tablename, cols, dtype):
+  for ind, i in enumerate(cmlist_final):
+    cmid_val = i
+    reid_val = random.choice(rel_id)
+
+    vals = [next_id, cmid_val, reid_val]
+    query = ut.insertquery_creation(tablename, cols, vals, dtype)
+    print(f"query is : {query}")
+    ut_ds.running_insertquery(query)
+
+
+fillinsttable_usstory()
+fillinsttable_testcase()
 fillinsttable_defectinsttable()
+fillinsttable_cminsttable()

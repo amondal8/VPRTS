@@ -16,15 +16,6 @@ mydb = mysql.connector.connect(
 filepath= "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 
-def getds_id():
-  mycursor = mydb.cursor()
-  mycursor.execute("Select ds_id from dataset ORDER BY timestamp DESC LIMIT 1")
-  result = mycursor.fetchone()
-  if result is None:
-    return result
-  else:
-    return result[0]
-
 
 def stringcreation_columns(my_list):
   my_str = ""
@@ -116,14 +107,20 @@ def fetch_ones_in_row(adjacency_matrix, row_index):
   return ones_indices
 
 
-def create_searchquery(us_list, colname, tablename, searchcolname, track_id, prefix):
+def fetch_nonzeros_in_row(adjacency_matrix, row_index):
+  row = adjacency_matrix[row_index]
+  ones_indices = [index for index, value in enumerate(row) if value != 0]
+  return ones_indices
+
+
+def create_searchquery(us_list, colname, tablename, searchcolname, ds_id, prefix):
   us_str = ""
   for ind, i in enumerate(us_list):
     if ind == len(us_list)-1:
       us_str = us_str + "\"" + prefix + str(i) +"\""
     else:
       us_str = us_str+"\"" + prefix + str(i) + "\","
-  query = f"""SELECT DISTINCT {colname} from {tablename} where {searchcolname} in ({us_str}) and track_id = {track_id}"""
+  query = f"""SELECT DISTINCT {colname} from {tablename} where {searchcolname} in ({us_str}) and ds_id = "{ds_id}"; """
   print(query)
   return query
 

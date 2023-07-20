@@ -35,11 +35,12 @@ sprintdata_tablename = tablename["sprintdata"]
 tc_tablename = tablename["tc_tablename"]
 tcexectime_tablename = tablename["tcexectime_tablename"]
 tcexecstatus_tablename = tablename["tcrunstatus_tablename"]
+defect_tablename = tablename["defect_tablename"]
 defectcomplexity_tablename = tablename["defectcomplexity_tablename"]
 defectpriority_tablename = tablename["defectpriority_tablename"]
 defectseverity_tablename = tablename["defectseverity_tablename"]
-tc_tablename = "testcase"
-defect_tablename = "defect"
+codemodule_tablename = tablename["codemodule_tablename"]
+
 sheetname_R1 = "R1"
 sheetname_R2 = "R2"
 sheetname_releasedata = "Release"
@@ -50,6 +51,7 @@ total_tccount = 20
 connection_prob = 1   # Using a value less than 1 will decrease the 1s even more, so use it wisely
 limiting_ones = 8
 tcexecutiontime_worksheetname = "TC_Executiontime"
+cm_worksheetname = "Code_module"
 adj_matrix = []
 total_tccount = dataconfig["tc_totalcount"]
 total_defectcount = dataconfig["defect_totalcount"]
@@ -206,18 +208,32 @@ def filltable_tcexecutiontime(sheetname):
     print(f"query is : {query}")
     ut.running_insertquery(query)
 
+def filltable_codemodule(sheetname):
+  cols = ['cm_id', 'cm_desc']
+  dtype = ['str', 'str']
 
-# filltable_userstory(sheetname_R1)
-# filltable_userstory(sheetname_R2)
+  df1 = pd.read_excel(filepath, sheet_name=sheetname)
+  for _, row in df1.iterrows():
+    cmid_val = row['cm_id']
+    cm_desc = row['cm_desc']
+    vals = [cmid_val, cm_desc]
+    query = ut.insertquery_creation(codemodule_tablename, cols, vals, dtype)
+    print(f"query is : {query}")
+    ut.running_insertquery(query)
 
-# filltable_userstorypoints(sheetname_R1)
-# filltable_userstorypoints(sheetname_R2)
-# filltable_releasedata(sheetname_releasedata)
-# filltable_sprintdata(sheetname_sprintdata)
+
+filltable_userstory(sheetname_R1)
+filltable_userstory(sheetname_R2)
+
+filltable_userstorypoints(sheetname_R1)
+filltable_userstorypoints(sheetname_R2)
+filltable_releasedata(sheetname_releasedata)
+filltable_sprintdata(sheetname_sprintdata)
 filltable_testcase(tcexecutiontime_worksheetname)
-# filltable_defects()
-# filltable_tcrunstatus()
-# filltable_defectpriority()
-# filltable_defectseverity()
-# filltable_defectcomplexity()
-# filltable_tcexecutiontime(tcexecutiontime_worksheetname)
+filltable_defects()
+filltable_tcrunstatus()
+filltable_defectpriority()
+filltable_defectseverity()
+filltable_defectcomplexity()
+filltable_tcexecutiontime(tcexecutiontime_worksheetname)
+filltable_codemodule(cm_worksheetname)

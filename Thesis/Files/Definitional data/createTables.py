@@ -106,7 +106,7 @@ def tablecreation_tcrunhistory(table_name):
 
 def tablecreation_codemodule(table_name):
   return f"""CREATE TABLE {table_name}(
-                    cm_id INT PRIMARY KEY,
+                    cm_id VARCHAR(10) PRIMARY KEY,
                     cm_desc VARCHAR(500) DEFAULT NULL);"""
 
 

@@ -1,4 +1,8 @@
-list1 = [1,2,3,4,5]
-list2 = [2,3]
-list3 = list1 - list2
-print(list3)
+dicts = {}
+flag=0
+dicts[1] = 23
+if 1 in dicts.keys():
+    flag=1
+else:
+    flag=2
+print(flag)
