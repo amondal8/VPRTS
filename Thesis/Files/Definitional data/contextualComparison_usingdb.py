@@ -58,34 +58,73 @@ def textsimilarity(text1, text2):
     doc2 = nlp(text2)
     return doc1.similarity(doc2)
 
+def writematrix(workbook, mat, usr2_list, usr1_list):
+    worksheetmat = workbook["Matrix"]
+    totrows = len(mat)
+    totcols = len(mat[0])
+    sheetrowcount = 2
+    sheetcolcount = 3
+    row_head = 2
+    col_head = 2
+
+    for indi, i in enumerate(usr2_list):
+        cell = worksheetmat.cell(row=indi+3, column=row_head)
+        cell.value = i
+    workbook.save(filepath)
+
+    for indi, i in enumerate(usr1_list):
+        cell = worksheetmat.cell(row=col_head, column=indi+3)
+        cell.value = i
+    workbook.save(filepath)
+
+
+    for row in range(totrows):
+        # print(f"row: {sheetrowcount}")
+        sheetrowcount += 1
+        sheetcolcount = 3
+        for col in range(totcols):
+            cell = worksheetmat.cell(row=sheetrowcount, column=sheetcolcount)
+            cell.value = mat[row][col]
+            # print(f"col: {sheetcolcount}")
+            sheetcolcount += 1
+    workbook.save(filepath)
+
 def contentcomparison(ds_id):
 
     query_r1 = f"select us_id, us_desc, us_points, us_businessvalue from {usdataset_tablename} where ds_id = '{ds_id}' and release_id in ({rel1})"
     query_r2 = f"select us_id, us_desc, us_points, us_businessvalue from {usdataset_tablename} where ds_id = '{ds_id}' and release_id in ({rel2})"
+    # query_cmval = f"select sum(affected_value) from us_cm_map where us_id = '{}' and ds_id = '{ds_id}'"
     usr1_res = ut_ds.running_searchqury(query_r1)
     usr2_res = ut_ds.running_searchqury(query_r2)
-    # usr1_list = ut.createlist_fromdbresult(usr1_res, 1)
-    # usr2_list = ut.createlist_fromdbresult(usr2_res, 1)
+    usr1_list = ut.createlist_fromdbresult(usr1_res,0)
+    usr2_list = ut.createlist_fromdbresult(usr2_res, 0)
     maxr1 = len(usr1_res)
     maxr2 = len(usr2_res)
-    print(f"r1: {maxr1} r2: {maxr2}")
     mat = [[0 for i in range(maxr1)] for j in range(maxr2)]
 
-    mat = [[0 for i in range(maxr1)] for j in range(maxr2)]
     for indi, i in enumerate(usr2_res):
         for indj, j in enumerate(usr1_res):
             simval = textsimilarity(i[1], j[1])
+            print(f"us2: {i[0]}, us1: {j[0]} have sim value: {simval}")
             mat[indi][indj] = simval
             if simval >= similarityval_threshold:
+                query_cmval = f"select sum(affected_value) from us_cm_map where us_id = '{j[0]}' and ds_id = '{ds_id}'"
+                # print(f"query: {query_cmval}")
+                cmval_res = ut_ds.running_searchqury(query_cmval)
+                cmval = cmval_res[0][0]
+                # print(f"cmval is: {cmval}")
                 if j[0] in simvalue_dict.keys():
                     val = simvalue_dict[j[0]]
-                    val += (i[2]+i[3]+j[2]+j[3])
+                    val += (i[2]+i[3]+(cmval*(j[2]+j[3])))
+                    # print(val)
+                    # print(cmval*val)
+                    simvalue_dict[j[0]] = val
                 else:
-                    simvalue_dict[j[0]] = (i[2]+i[3]+j[2]+j[3])
-                # usmap_dict[]
+                    simvalue_dict[j[0]] = (i[2]+i[3]+(cmval*(j[2]+j[3])))
+
     print(simvalue_dict)
 
-
+    writematrix(workbook, mat, usr2_list, usr1_list)
     for i in mat:
         print(i)
 
@@ -223,24 +262,6 @@ def valuesCarriedToR1_WeightedSim(rwCount1, rwCount2, similarityVal):  # configu
     cell = worksheet1.cell(row=rwCount1, column=3)
     writeto_excel(cell, userStory_PointR1)
 
-
-def writematrix(workbook, mat):
-    worksheetmat = workbook["Matrix"]
-    totrows = len(mat)
-    totcols = len(mat[0])
-    sheetrowcount = 2
-    sheetcolcount = 3
-
-    for row in range(totrows):
-        # print(f"row: {sheetrowcount}")
-        sheetrowcount += 1
-        sheetcolcount = 3
-        for col in range(totcols):
-            cell = worksheetmat.cell(row=sheetrowcount, column=sheetcolcount)
-            cell.value = mat[row][col]
-            # print(f"col: {sheetcolcount}")
-            sheetcolcount += 1
-    workbook.save(filepath)
 
 def texualcomparison(configuration):
 
