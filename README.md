@@ -133,5 +133,6 @@ Once the instance tables are created I will do the required mapping between thes
 
 **ER Diagram**
 
-![Copy of Flow Diagrams-ER_diagram](https://github.com/amondal8/marters-thesis/assets/134355254/c9e48689-c9f4-4484-99a5-ecda0c957031)
+![Copy of Flow Diagrams-ER_diagram (2)](https://github.com/amondal8/marters-thesis/assets/134355254/ec29f8a9-9a0a-4eb9-a81d-099cdae60c15)
+
 
