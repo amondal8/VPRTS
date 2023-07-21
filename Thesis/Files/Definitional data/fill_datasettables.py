@@ -9,10 +9,56 @@ from datetime import datetime
 
 config = configparser.ConfigParser()
 config.read('config1.ini')
+run_config = config['run_configuration']
+tablenames_config = config['tablenames']
+dataset_tablename = tablenames_config["dataset_tablename"]
+# usselection_config = "random"   #random or serialized
+# next_id = 1
+
+config_type = run_config['run_config']
+curr_id = ut_ds.getds_id()
+current_datetime = datetime.now()
+formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+if config_type == "new":
+  if curr_id is None:
+    next_id = 1
+  else:
+    next_id = int(curr_id)+1
+  cols=["ds_id", "run_config", "timestamp"]
+  vals = [next_id, config_type, formatted_datetime]
+  datatype = ["str", "str", "str"]
+  query = ut.insertquery_creation(dataset_tablename, cols, vals, datatype)
+  ut_ds.running_insertquery(query)
+  ut.write_to_txt("config1.ini")
+  print("Finished insert query")
+
+elif config_type == "copy":
+  next_id = int(curr_id) + 1
+  config_copiedfrom = run_config["config_copiedfrom"]
+  cols = ["ds_id", "run_config", "config_copiedfrom", "timestamp"]
+  vals = [next_id, config_type, config_copiedfrom, formatted_datetime]
+  datatype = ["str", "str", "str", "str"]
+  query = ut.insertquery_creation(dataset_tablename, cols, vals, datatype)
+  # ut_ds.running_insertquery(query)
+  query_inifile = f"Select ini_file from dataset where ds_id = '{config_copiedfrom}'"
+  inifile_res = ut_ds.running_searchqury(query_inifile)
+  inicontent = inifile_res[0][0]
+  ut_ds.json_to_ini(inicontent)
+  ut.write_to_txt('copiedconfig.ini')
+
+else:
+  print(f"Wrong input for config_type == {config_type}")
+
+configfilename = ut.read_from_txt()
+config.read(configfilename)
+print(configfilename)
+
 dbconnect = config['dbconnection_dataset']
 data = config['data']
 run_config = config['run_configuration']
 tablenames_config = config['tablenames']
+
+print(f"new usp_val: {data['usp_threshold']}")
 
 mydb = mysql.connector.connect(
   host=dbconnect["host"],
@@ -35,30 +81,6 @@ uscount_r2 = int(data['uscount_r2'])
 cm_count = int(data['cm_totalcount'])
 tc_count = int(data['tc_totalcount'])
 defect_count = int(data['defect_totalcount'])
-usselection_config = "random"   #random or serialized
-# next_id = 1
-
-config_type = run_config['run_config']
-if config_type == "new":
-  curr_id = ut_ds.getds_id()
-  if curr_id is None:
-    next_id = 1
-  else:
-    next_id = int(curr_id)+1
-  current_datetime = datetime.now()
-  formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-  cols=["ds_id", "run_config", "timestamp"]
-  vals = [next_id, config_type, formatted_datetime]
-  datatype = ["str", "str", "str"]
-  query = ut.insertquery_creation(dataset_tablename, cols, vals, datatype)
-  ut_ds.running_insertquery(query)
-  print("Finished insert query")
-
-elif config_type == "old":
-  config_copiedfrom = run_config["config_copiedfrom"]
-
-else:
-  print(f"Wrong input for config_type == {config_type}")
 
 def fillinsttable_usstory():
 
@@ -211,7 +233,7 @@ def insertingvalue_cminsttable(cmlist_final, rel_id, tablename, cols, dtype):
     ut_ds.running_insertquery(query)
 
 
-fillinsttable_usstory()
-fillinsttable_testcase()
-fillinsttable_defectinsttable()
-fillinsttable_cminsttable()
+# fillinsttable_usstory()
+# fillinsttable_testcase()
+# fillinsttable_defectinsttable()
+# fillinsttable_cminsttable()

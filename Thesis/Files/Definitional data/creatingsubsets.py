@@ -34,6 +34,7 @@ def creation_userstorysubsets(us_dict, usp_threshold):
     for key in us_dict:
         if us_dict[key] >= usp_threshold:
             us_list.append(key)
+    print(f"US_LIST: {us_list}")
     return us_list
 
 def creation_testcasesubset(us_list):

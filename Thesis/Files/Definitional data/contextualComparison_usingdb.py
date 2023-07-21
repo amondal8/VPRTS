@@ -105,7 +105,7 @@ def contentcomparison(ds_id):
     for indi, i in enumerate(usr2_res):
         for indj, j in enumerate(usr1_res):
             simval = textsimilarity(i[1], j[1])
-            print(f"us2: {i[0]}, us1: {j[0]} have sim value: {simval}")
+            # print(f"us2: {i[0]}, us1: {j[0]} have sim value: {simval}")
             mat[indi][indj] = simval
             if simval >= similarityval_threshold:
                 query_cmval = f"select sum(affected_value) from us_cm_map where us_id = '{j[0]}' and ds_id = '{ds_id}'"
@@ -122,7 +122,7 @@ def contentcomparison(ds_id):
                 else:
                     simvalue_dict[j[0]] = (i[2]+i[3]+(cmval*(j[2]+j[3])))
 
-    print(simvalue_dict)
+    print(f"User stories with cumulative value after similarity measure: {simvalue_dict}")
 
     writematrix(workbook, mat, usr2_list, usr1_list)
     for i in mat:

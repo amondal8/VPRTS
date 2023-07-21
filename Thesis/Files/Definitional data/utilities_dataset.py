@@ -1,10 +1,13 @@
 import mysql.connector
 import openpyxl as op
 import configparser
+import json
 
+file = "ini1"
 config = configparser.ConfigParser()
 config.read('config1.ini')
 dbconnect = config['dbconnection_dataset']
+data = config['data']
 
 mydb = mysql.connector.connect(
   host=dbconnect["host"],
@@ -146,6 +149,44 @@ def creating_prioritydict_tclist(tc_list, ds_id):
   return sorted_tcdict
 
 
+def ini_to_json(ini_filepath):
+  # Read the .ini file
+  config = configparser.ConfigParser()
+  config.read(ini_filepath)
+
+  # Convert the .ini file to a dictionary
+  ini_dict = {}
+  for section in config.sections():
+    ini_dict[section] = dict(config[section])
+
+  # Convert the dictionary to a JSON string
+  json_string = json.dumps(ini_dict, indent=4)
+
+  return json_string
+
+
+def insert_json_data(json_data, ds_id):
+  sql_insert_query = f"UPDATE dataset SET ini_file = ('{json_data}') where ds_id = '{ds_id}' "
+  running_insertquery(sql_insert_query)
+
+
+def json_to_ini(json_data):
+  data_dict = json.loads(json_data)
+
+  # Add each key-value pair to the 'DEFAULT' section of the .ini file
+  for key, value in data_dict.items():
+    config['DEFAULT'][key] = str(value)
+
+  # Write the .ini data to a file
+  with open('copiedconfig.ini', 'w') as configfile:
+    config.write(configfile)
+
+
+
+# json_data = ini_to_json("config1.ini")
+# # # # print(json_data)
+# # insert_json_data(json_data, 1)
+# json_to_ini(json_data)
 
 # creating_prioritydict_tclist(["TC1", "TC2"], "1")
 

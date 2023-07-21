@@ -48,7 +48,7 @@ def datasettablecreation_dataset(table_name):   #run_config values will be "new"
               parameters VARCHAR(1000),
               environment VARCHAR(100),
               results VARCHAR(500)
-              ini_file BLOB);"""
+              ini_file JSON);"""
 
 
 def datasettablecreation_userstory(table_name):

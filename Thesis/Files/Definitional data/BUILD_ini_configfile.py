@@ -43,8 +43,8 @@ config.set('tablenames', 'tcdefectmap_tablename', 'tc_defect_map')
 
 
 config.add_section('run_configuration')
-config.set('run_configuration', 'run_config', 'new')
-config.set('run_configuration', 'config_copiedfrom', 'null')
+config.set('run_configuration', 'run_config', 'new')        #Values set to "new" or copy
+config.set('run_configuration', 'config_copiedfrom', 'null')    #When value of "run_config" is set to "copy"
 
 
 config.add_section('data')

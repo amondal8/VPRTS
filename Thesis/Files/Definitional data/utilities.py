@@ -1,7 +1,13 @@
 import mysql.connector
 import openpyxl as op
 import configparser
+import sys
+from io import StringIO
+import subprocess
+import utilities_dataset as ut_ds
 
+outputfile = "output.txt"
+txtfilename = "inifile_name.txt"
 config = configparser.ConfigParser()
 config.read('config1.ini')
 dbconnect = config['dbconnection']
@@ -121,7 +127,7 @@ def create_searchquery(us_list, colname, tablename, searchcolname, ds_id, prefix
     else:
       us_str = us_str+"\"" + prefix + str(i) + "\","
   query = f"""SELECT DISTINCT {colname} from {tablename} where {searchcolname} in ({us_str}) and ds_id = "{ds_id}"; """
-  print(query)
+  # print(query)
   return query
 
 def running_searchqury(query):
@@ -154,6 +160,41 @@ def createlist_fromdbresult(res, valuecol):
   for ind, i in enumerate(res):
     my_list.append(res[ind][valuecol])
   return my_list
+
+
+def write_to_txt(data):
+  with open(txtfilename, 'w') as file:
+    file.write(data)
+
+def read_from_txt():
+  with open(txtfilename, 'r') as file:
+    return file.read()
+
+
+def copy_console(opentype, program, *args, **kwargs):
+  output_buffer = StringIO()
+
+  original_stdout = sys.stdout
+  original_stderr = sys.stderr
+
+  sys.stdout = output_buffer
+  sys.stderr = output_buffer
+  result = program(*args, **kwargs)
+  sys.stdout = original_stdout
+  sys.stderr = original_stderr
+  captured_output = output_buffer.getvalue()
+  with open(outputfile, opentype) as file:
+    file.write(captured_output)
+
+  print("Complete console output has been saved to:", outputfile)
+  return result
+
+# def method_togen():
+#   print("console output")
+#   print("i am inside the method")
+#   return 1
+#
+# print(copy_console(method_togen,None, 'a'))
 
 # creating_prioritydict_tclist(["TC1", "TC2"], "1")
 

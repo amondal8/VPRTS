@@ -9,7 +9,8 @@ import matrixcreation as matc
 import defectmapping as defmap
 
 config = configparser.ConfigParser()
-config.read('config1.ini')
+configfilename = ut.read_from_txt()
+config.read(configfilename)
 dbconnect = config['dbconnection_dataset']
 data = config['data']
 run_config = config['run_configuration']

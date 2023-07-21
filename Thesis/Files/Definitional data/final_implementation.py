@@ -8,9 +8,11 @@ import pandas as pd
 import contextualComparison_usingdb as contcomp
 import creatingsubsets as createsubset
 
+
 filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
 config = configparser.ConfigParser()
-config.read('config1.ini')
+configfilename = ut.read_from_txt()
+config.read(configfilename)
 dbconnect = config['dbconnection_dataset']
 data = config['data']
 tablenames_config = config['tablenames']
@@ -38,11 +40,6 @@ tcexectime_fixed = int(data["tcexectime_fixed"])
 
 sheetname_R1 = "R1"
 sheetname_R2 = "R2"
-# total_uscount = int(dataconfig["us_totalcount"])
-# total_tccount = int(dataconfig["tc_totalcount"])
-# total_defectcount = int(dataconfig["defect_totalcount"])
-# tc_prefix = dataconfig["tc_prefix"]
-# defect_prefix = dataconfig["defect_prefix"]
 tc_list = []
 total_exectime = 90
 tc_exectime = 15
@@ -61,8 +58,8 @@ ds_id = ut_ds.getds_id()
 configuration = 3
 
 # contcomp.texualcomparison(configuration)
-us_dict = contcomp.contentcomparison(ds_id)
-us_list = createsubset.creation_userstorysubsets(us_dict, usp_threshold)
+us_dict = ut.copy_console('w', contcomp.contentcomparison, ds_id)
+us_list = ut.copy_console('a', createsubset.creation_userstorysubsets, us_dict, usp_threshold)
 
 print(us_list)
 
@@ -89,26 +86,13 @@ def creation_defectsubset(tc_list):
   return sorted(defect_list)
 
 
-def read_ini_as_blob(file_path):
-  with open(file_path, 'rb') as file:
-    blob_data = file.read()
-  return blob_data
 
-
-def saving_configuration():
-  ini_filepath = "C:\\Users\\amondal8\\PycharmProjects\\pythonProject3\\Thesis\\Files\\Definitional data\\config1.ini"
-  blob_data = read_ini_as_blob(ini_filepath)
-  # query = f"Insert into dataset(ini_file) Values ({blob_data}) where ds_id = {ds_id}"
-  # ut_ds.running_insertquery(query)
-
-  print(blob_data)
-
-# tc_list = creation_tcsubset(us_list)
-# sorted_tcdict = ut_ds.creating_prioritydict_tclist(tc_list, ds_id)
-# createsubset.creatingtcset_fixedexecutiontime(sorted_tcdict, total_executiontime, tcexectime_fixed)
-# tcexec_dict = createsubset.create_tcdict_exectime(tc_list, ds_id)  # Creating a dictionary where TC# is the key and its execution time is the value
-# print(f"sorted_tcdict {sorted_tcdict}")
-# print(f"tcexec_dict {tcexec_dict}")
-# createsubset.creatingtcset_varyingecutiontime(sorted_tcdict, total_exectime, tcexec_dict)    # Creating a smaller subset of test cases based on the variable exacution time for each test case
-# defect_list = creation_defectsubset(tc_list)
-saving_configuration()
+tc_list = ut.copy_console('a', creation_tcsubset, us_list)
+print(tc_list)
+sorted_tcdict = ut.copy_console('a',ut_ds.creating_prioritydict_tclist,tc_list, ds_id)
+ut.copy_console('a', createsubset.creatingtcset_fixedexecutiontime, sorted_tcdict, total_executiontime, tcexectime_fixed)
+tcexec_dict = ut.copy_console('a', createsubset.create_tcdict_exectime, tc_list, ds_id)  # Creating a dictionary where TC# is the key and its execution time is the value
+print(f"sorted_tcdict {sorted_tcdict}")
+print(f"tcexec_dict {tcexec_dict}")
+ut.copy_console('a', createsubset.creatingtcset_varyingecutiontime, sorted_tcdict, total_exectime, tcexec_dict)    # Creating a smaller subset of test cases based on the variable exacution time for each test case
+defect_list = ut.copy_console('a', creation_defectsubset, tc_list)
