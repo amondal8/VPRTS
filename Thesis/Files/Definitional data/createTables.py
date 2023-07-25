@@ -5,7 +5,6 @@ import configparser
 config = configparser.ConfigParser()
 config.read('config1.ini')
 dbconnect = config['dbconnection']
-configuration = config['configuration']
 
 mydb = mysql.connector.connect(
   host=dbconnect["host"],
@@ -14,14 +13,13 @@ mydb = mysql.connector.connect(
   database=dbconnect["database"]
 )
 
-tablecreation_config = configuration['tablecreate_config']
-
 
 def tablecreation_userstory(table_name):
   return f"""CREATE TABLE {table_name}(
-              us_id VARCHAR(10) Primary key,
-              us_desc VARCHAR(500));"""
-#need to provide a release
+              us_id VARCHAR(10),
+              us_desc VARCHAR(500),
+              project_id VARCHAR(10),
+              PRIMARY KEY(us_id, project_id));"""
 
 
 def tablecreation_userstoryvalue(table_name):

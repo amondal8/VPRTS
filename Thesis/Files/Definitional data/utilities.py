@@ -162,11 +162,11 @@ def createlist_fromdbresult(res, valuecol):
   return my_list
 
 
-def write_to_txt(data):
+def write_to_txt(txtfilename, data):
   with open(txtfilename, 'w') as file:
     file.write(data)
 
-def read_from_txt():
+def read_from_txt(txtfilename):
   with open(txtfilename, 'r') as file:
     return file.read()
 
@@ -189,10 +189,43 @@ def copy_console(opentype, program, *args, **kwargs):
   print("Complete console output has been saved to:", outputfile)
   return result
 
-# def method_togen():
-#   print("console output")
-#   print("i am inside the method")
-#   return 1
+
+def updatetable_query(tablemname, columnname, value, dtype, ds_id):
+  if dtype == "int":
+    query = f"UPDATE {tablemname} SET {columnname} = {value} where ds_id='{ds_id}'"
+  else:
+    query = f"""UPDATE {tablemname} SET {columnname} = "{value}" where ds_id='{ds_id}'"""
+
+  return query
+
+def write_dsid_totxt(filepath, data):
+  with open(filepath, 'r') as file:
+    lines = file.readlines()
+  # Check if the file has at least two lines
+  if len(lines) >= 2:
+    # Modify the 2nd line (index 1) with the content to write
+    lines[1] = data + '\n'
+  elif len(lines) < 2:
+    lines.append('\n')
+    lines[1] = data + '\n'
+  with open(filepath,'w') as file:
+    file.writelines(lines)
+
+
+
+def read_dsid_fromtxt(filepath):
+  with open(filepath, 'r') as file:
+    lines = file.readlines()
+    if len(lines) >= 2:
+      # Return the 2nd line (index 1)
+      return lines[1].strip()
+    else:
+      return "File has less than 2 lines."
+
+# data = "ds_id"
+# write_dsid_totxt(txtfilename, data)
+
+# print(read_dsid_fromtxt(txtfilename))
 #
 # print(copy_console(method_togen,None, 'a'))
 

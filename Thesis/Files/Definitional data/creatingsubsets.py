@@ -26,9 +26,6 @@ def create_tcdict_exectime(tc_list, ds_id):
     return keyval_dict
 
 
-listtc = ["TC1","TC2"]
-create_tcdict_exectime(listtc, 1)
-
 def creation_userstorysubsets(us_dict, usp_threshold):
     us_list = []
     for key in us_dict:

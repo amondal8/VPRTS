@@ -125,8 +125,8 @@ def contentcomparison(ds_id):
     print(f"User stories with cumulative value after similarity measure: {simvalue_dict}")
 
     writematrix(workbook, mat, usr2_list, usr1_list)
-    for i in mat:
-        print(i)
+    # for i in mat:
+    #     print(i)
 
     return simvalue_dict
 

@@ -43,11 +43,14 @@ config.set('tablenames', 'tcdefectmap_tablename', 'tc_defect_map')
 
 
 config.add_section('run_configuration')
-config.set('run_configuration', 'run_config', 'new')        #Values set to "new" or copy
+config.set('run_configuration', 'run_config', 'new')        #Values set to "new" or "copy"
 config.set('run_configuration', 'config_copiedfrom', 'null')    #When value of "run_config" is set to "copy"
+config.set('run_configuration', 'copy_ds_id', 'yes')
+config.set('run_configuration', 'copied_dsid', '1')
 
 
 config.add_section('data')
+config.set('data', 'project_id', '1')
 config.set('data', 'usp_threshold', '0')
 config.set('data', 'us_totalcount', '20')
 config.set('data', 'uscount_r1', '10')

@@ -7,7 +7,6 @@ config = configparser.ConfigParser()
 config.read('config1.ini')
 dbconnect_def = config['dbconnection']
 dbconnect = config['dbconnection_dataset']
-configuration = config['configuration']
 tablenames_config = config['tablenames']
 
 mydb = mysql.connector.connect(
@@ -17,7 +16,6 @@ mydb = mysql.connector.connect(
   database=dbconnect["database"]
 )
 
-tablecreation_config = configuration['tablecreate_config']
 definitional_database = dbconnect_def["database"]
 #Primary tablenames
 us_tablename = tablenames_config["us_tablename"]
@@ -47,7 +45,7 @@ def datasettablecreation_dataset(table_name):   #run_config values will be "new"
               algorithm VARCHAR(200),
               parameters VARCHAR(1000),
               environment VARCHAR(100),
-              results VARCHAR(500)
+              results VARCHAR(5000),
               ini_file JSON);"""
 
 
@@ -124,7 +122,6 @@ query5 = datasettablecreation_cm(cmdatasettable_tablename)
 query6 = datasettablecreation_tcmap(ustcmap_tablename)
 query7 = datasettablecreation_cmmap(uscmmap_tablename)
 query8 = datasettablecreation_defectmap(tcdefectmap_tablename)
-
 
 
 querylist = [query1, query2, query3, query4, query5, query6, query7, query8]

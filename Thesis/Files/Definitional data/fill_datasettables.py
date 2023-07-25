@@ -7,58 +7,60 @@ import utilities as ut
 from datetime import datetime
 # import fill_primarytables as currid
 
+outputfile_name = "output.txt"
+inifilename_stored = "inifile_name.txt"
 config = configparser.ConfigParser()
-config.read('config1.ini')
-run_config = config['run_configuration']
-tablenames_config = config['tablenames']
-dataset_tablename = tablenames_config["dataset_tablename"]
-# usselection_config = "random"   #random or serialized
-# next_id = 1
+# config.read('config1.ini')
+# run_config = config['run_configuration']
+# tablenames_config = config['tablenames']
+# dataset_tablename = tablenames_config["dataset_tablename"]
+# # usselection_config = "random"   #random or serialized
+# # next_id = 1
+#
+# config_type = run_config['run_config']
+# curr_id = ut_ds.getds_id()
+# current_datetime = datetime.now()
+# formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+# if config_type == "new":
+#   if curr_id is None:
+#     next_id = 1
+#   else:
+#     next_id = int(curr_id)+1
+#   cols=["ds_id", "run_config", "timestamp"]
+#   vals = [next_id, config_type, formatted_datetime]
+#   datatype = ["str", "str", "str"]
+#   query = ut.insertquery_creation(dataset_tablename, cols, vals, datatype)
+#   ut_ds.running_insertquery(query)
+#   ut.write_to_txt(inifilename_stored, "config1.ini")
+#   print("Finished insert query")
+#
+# elif config_type == "copy":
+#   next_id = int(curr_id) + 1
+#   config_copiedfrom = run_config["config_copiedfrom"]
+#   cols = ["ds_id", "run_config", "config_copiedfrom", "timestamp"]
+#   vals = [next_id, config_type, config_copiedfrom, formatted_datetime]
+#   datatype = ["str", "str", "str", "str"]
+#   query = ut.insertquery_creation(dataset_tablename, cols, vals, datatype)
+#   ut_ds.running_insertquery(query)
+#   query_inifile = f"Select ini_file from dataset where ds_id = '{config_copiedfrom}'"
+#   inifile_res = ut_ds.running_searchqury(query_inifile)
+#   inicontent = inifile_res[0][0]
+#   ut_ds.json_to_ini(inicontent)
+#   ut.write_to_txt(inifilename_stored,'copiedconfig.ini')
+#
+# else:
+#   print(f"Wrong input for config_type == {config_type}")
 
-config_type = run_config['run_config']
-curr_id = ut_ds.getds_id()
-current_datetime = datetime.now()
-formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-if config_type == "new":
-  if curr_id is None:
-    next_id = 1
-  else:
-    next_id = int(curr_id)+1
-  cols=["ds_id", "run_config", "timestamp"]
-  vals = [next_id, config_type, formatted_datetime]
-  datatype = ["str", "str", "str"]
-  query = ut.insertquery_creation(dataset_tablename, cols, vals, datatype)
-  ut_ds.running_insertquery(query)
-  ut.write_to_txt("config1.ini")
-  print("Finished insert query")
-
-elif config_type == "copy":
-  next_id = int(curr_id) + 1
-  config_copiedfrom = run_config["config_copiedfrom"]
-  cols = ["ds_id", "run_config", "config_copiedfrom", "timestamp"]
-  vals = [next_id, config_type, config_copiedfrom, formatted_datetime]
-  datatype = ["str", "str", "str", "str"]
-  query = ut.insertquery_creation(dataset_tablename, cols, vals, datatype)
-  # ut_ds.running_insertquery(query)
-  query_inifile = f"Select ini_file from dataset where ds_id = '{config_copiedfrom}'"
-  inifile_res = ut_ds.running_searchqury(query_inifile)
-  inicontent = inifile_res[0][0]
-  ut_ds.json_to_ini(inicontent)
-  ut.write_to_txt('copiedconfig.ini')
-
-else:
-  print(f"Wrong input for config_type == {config_type}")
-
-configfilename = ut.read_from_txt()
+next_id = ut.read_dsid_fromtxt(inifilename_stored)
+print(f"ds_id: {next_id}")
+configfilename = ut.read_from_txt(inifilename_stored)
 config.read(configfilename)
-print(configfilename)
+# print(configfilename)
 
 dbconnect = config['dbconnection_dataset']
 data = config['data']
 run_config = config['run_configuration']
 tablenames_config = config['tablenames']
-
-print(f"new usp_val: {data['usp_threshold']}")
 
 mydb = mysql.connector.connect(
   host=dbconnect["host"],
@@ -66,7 +68,6 @@ mydb = mysql.connector.connect(
   password=dbconnect["password"],
   database=dbconnect["database"]
 )
-
 
 dataset_tablename = tablenames_config["dataset_tablename"]
 usdataset_tablename = tablenames_config["usdatasettable_tablename"]
@@ -76,6 +77,7 @@ cmdatasettable_tablename = tablenames_config["cmdatasettable_tablename"]
 
 rel1 = data['release1'].split(',')
 rel2 = data['release2'].split(',')
+project_id = data['project_id']
 uscount_r1 = int(data['uscount_r1'])
 uscount_r2 = int(data['uscount_r2'])
 cm_count = int(data['cm_totalcount'])
@@ -86,7 +88,7 @@ def fillinsttable_usstory():
 
   cols = ['ds_id', 'us_id', 'us_desc', 'release_id', 'us_points', 'us_businessvalue']
   dtype = ['str', 'int', 'str', 'int', 'int', 'int']
-  query_usid = "select us_id, us_desc from userstory;"
+  query_usid = f"select us_id, us_desc from userstory where project_id = '{project_id}';"
   query_releaseid = "select release_id from release_data"
   query_usp = "select us_points,us_businessvalue from userstoryvalue"
   usid_res = ut.running_searchqury(query_usid)
@@ -233,7 +235,7 @@ def insertingvalue_cminsttable(cmlist_final, rel_id, tablename, cols, dtype):
     ut_ds.running_insertquery(query)
 
 
-# fillinsttable_usstory()
-# fillinsttable_testcase()
-# fillinsttable_defectinsttable()
-# fillinsttable_cminsttable()
+fillinsttable_usstory()
+fillinsttable_testcase()
+fillinsttable_defectinsttable()
+fillinsttable_cminsttable()

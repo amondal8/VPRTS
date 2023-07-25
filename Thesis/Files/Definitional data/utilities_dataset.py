@@ -84,7 +84,7 @@ def running_insertquery(query):
     mydb.start_transaction()
   # mycursor = cc.connection()
   mycursor.execute(query)
-  print(f"Query {query} executed successfully")
+  # print(f"Query {query} executed successfully")
   mydb.commit()
   # cc.closeconnection()
   mycursor.close()
@@ -160,33 +160,35 @@ def ini_to_json(ini_filepath):
     ini_dict[section] = dict(config[section])
 
   # Convert the dictionary to a JSON string
-  json_string = json.dumps(ini_dict, indent=4)
+  json_string = json.dumps(ini_dict, indent=1)
 
   return json_string
 
 
 def insert_json_data(json_data, ds_id):
-  sql_insert_query = f"UPDATE dataset SET ini_file = ('{json_data}') where ds_id = '{ds_id}' "
+  sql_insert_query = f"UPDATE dataset SET ini_file = ('{json_data}') where ds_id = '{ds_id}'"
+  # print(sql_insert_query)
   running_insertquery(sql_insert_query)
 
 
 def json_to_ini(json_data):
   data_dict = json.loads(json_data)
-
   # Add each key-value pair to the 'DEFAULT' section of the .ini file
   for key, value in data_dict.items():
-    config['DEFAULT'][key] = str(value)
+    config[key] = value
 
-  # Write the .ini data to a file
   with open('copiedconfig.ini', 'w') as configfile:
     config.write(configfile)
 
 
 
+
 # json_data = ini_to_json("config1.ini")
-# # # # print(json_data)
+# print(json_data)
 # # insert_json_data(json_data, 1)
 # json_to_ini(json_data)
+# json_data = ini_to_json("copiedconfig.ini")
+# print(json_data)
 
 # creating_prioritydict_tclist(["TC1", "TC2"], "1")
 

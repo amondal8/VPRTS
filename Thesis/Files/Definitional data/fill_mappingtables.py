@@ -8,8 +8,9 @@ from datetime import datetime
 import matrixcreation as matc
 import defectmapping as defmap
 
+inifilename_stored = "inifile_name.txt"
 config = configparser.ConfigParser()
-configfilename = ut.read_from_txt()
+configfilename = ut.read_from_txt(inifilename_stored)
 config.read(configfilename)
 dbconnect = config['dbconnection_dataset']
 data = config['data']

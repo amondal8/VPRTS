@@ -13,7 +13,6 @@ workbook = op.load_workbook(filepath)
 config = configparser.ConfigParser()
 config.read('config1.ini')
 dbconnect = config['dbconnection']
-configure = config['configuration']
 dataconfig = config['data']
 tablename = config['tablenames']
 
@@ -59,14 +58,15 @@ defect_prefix = dataconfig["defect_prefix"]
 
 
 def filltable_userstory(sheetname):
-  cols = ['us_id', 'us_desc']
-  dtype = ['str', 'str']
+  cols = ['us_id', 'us_desc', 'project_id']
+  dtype = ['str', 'str', 'str']
 
   df1 = pd.read_excel(filepath, sheet_name=sheetname)
   for _, row in df1.iterrows():
     raw_usid_val = row['US Number']
     usdesc_val = row['User story description']
-    vals = [raw_usid_val, usdesc_val]
+    projectid_val = row['Project_id']
+    vals = [raw_usid_val, usdesc_val, projectid_val]
     query = ut.insertquery_creation(us_tablename, cols, vals, dtype)
     print(f"query is : {query}")
     ut.running_insertquery(query)

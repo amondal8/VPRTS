@@ -8,14 +8,16 @@ import pandas as pd
 import contextualComparison_usingdb as contcomp
 import creatingsubsets as createsubset
 
-
+outputfilename = "output.txt"
+inifilename_stored = "inifile_name.txt"
 filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
 config = configparser.ConfigParser()
-configfilename = ut.read_from_txt()
+configfilename = ut.read_from_txt(inifilename_stored)
 config.read(configfilename)
 dbconnect = config['dbconnection_dataset']
 data = config['data']
 tablenames_config = config['tablenames']
+run_config = config['run_configuration']
 
 mydb = mysql.connector.connect(
   host=dbconnect["host"],
@@ -27,6 +29,7 @@ mydb = mysql.connector.connect(
 mydb.start_transaction()
 
 # Global Variables
+dataset_tablename = tablenames_config["dataset_tablename"]
 ustcmap_tablename = tablenames_config["ustcmap_tablename"]
 uscmmap_tablename = tablenames_config["uscmmap_tablename"]
 tcdefectmap_tablename = tablenames_config["tcdefectmap_tablename"]
@@ -35,7 +38,7 @@ total_tccount = int(data["tc_totalcount"])
 total_defectcount = int(data["defect_totalcount"])
 total_executiontime = int(data["total_executiontime"])
 tcexectime_fixed = int(data["tcexectime_fixed"])
-
+copy_ds_id = run_config["copy_ds_id"]
 
 
 sheetname_R1 = "R1"
@@ -45,7 +48,11 @@ total_exectime = 90
 tc_exectime = 15
 worksheetname_executiontime = "TC_Executiontime"
 
-ds_id = ut_ds.getds_id()
+if(copy_ds_id.lower() == copy_ds_id):
+  copied_dsid = run_config["copied_dsid"]
+  ds_id = copied_dsid
+else:
+  ds_id = ut_ds.getds_id()
 
 
 # Configuration is the  way we want to calculate the cumulative value
@@ -86,6 +93,14 @@ def creation_defectsubset(tc_list):
   return sorted(defect_list)
 
 
+def saving_results():
+  result_text = ut.read_from_txt(outputfilename)
+  print(f"filename: {outputfilename}")
+  query_updateresults = ut.updatetable_query(dataset_tablename, "results", result_text, "str", ds_id)
+  ut_ds.running_insertquery(query_updateresults)
+  json_data = ut_ds.ini_to_json(configfilename)
+  ut_ds.insert_json_data(json_data, ds_id)
+
 
 tc_list = ut.copy_console('a', creation_tcsubset, us_list)
 print(tc_list)
@@ -96,3 +111,4 @@ print(f"sorted_tcdict {sorted_tcdict}")
 print(f"tcexec_dict {tcexec_dict}")
 ut.copy_console('a', createsubset.creatingtcset_varyingecutiontime, sorted_tcdict, total_exectime, tcexec_dict)    # Creating a smaller subset of test cases based on the variable exacution time for each test case
 defect_list = ut.copy_console('a', creation_defectsubset, tc_list)
+saving_results()
