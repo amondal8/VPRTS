@@ -45,15 +45,12 @@ sheetname_R2 = "R2"
 sheetname_releasedata = "Release"
 sheetname_sprintdata = "Sprint"
 tc_count = matc.total_tccount
-total_uscount = 10
-total_tccount = 20
-connection_prob = 1   # Using a value less than 1 will decrease the 1s even more, so use it wisely
-limiting_ones = 8
+# connection_prob = 1   # Using a value less than 1 will decrease the 1s even more, so use it wisely
+# limiting_ones = 8
 tcexecutiontime_worksheetname = "TC_Executiontime"
 cm_worksheetname = "Code_module"
 adj_matrix = []
-total_tccount = dataconfig["tc_totalcount"]
-total_defectcount = dataconfig["defect_totalcount"]
+total_defectcount_primarytable = 190
 defect_prefix = dataconfig["defect_prefix"]
 
 
@@ -100,8 +97,8 @@ def filltable_testcase(sheetname):
 def filltable_defects():
   cols = ['defect_id']
   dtype = ['str']
-  print(f"type : {type(total_defectcount)}")
-  for i in range(int(total_defectcount)):
+  # print(f"type : {type(total_defectcount)}")
+  for i in range(int(total_defectcount_primarytable)):
     id_val = defect_prefix + str(i+1)
     vals = [id_val]
     query = ut.insertquery_creation(defect_tablename, cols, vals, dtype)

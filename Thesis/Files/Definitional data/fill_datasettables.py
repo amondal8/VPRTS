@@ -51,7 +51,7 @@ config = configparser.ConfigParser()
 # else:
 #   print(f"Wrong input for config_type == {config_type}")
 
-next_id = ut.read_dsid_fromtxt(inifilename_stored)
+next_id = ut_ds.getds_id()
 print(f"ds_id: {next_id}")
 configfilename = ut.read_from_txt(inifilename_stored)
 config.read(configfilename)
@@ -239,3 +239,4 @@ fillinsttable_usstory()
 fillinsttable_testcase()
 fillinsttable_defectinsttable()
 fillinsttable_cminsttable()
+ut.saving_config(configfilename, next_id)

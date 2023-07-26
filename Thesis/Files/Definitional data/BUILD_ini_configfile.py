@@ -46,7 +46,6 @@ config.add_section('run_configuration')
 config.set('run_configuration', 'run_config', 'new')        #Values set to "new" or "copy"
 config.set('run_configuration', 'config_copiedfrom', 'null')    #When value of "run_config" is set to "copy"
 config.set('run_configuration', 'copy_ds_id', 'yes')
-config.set('run_configuration', 'copied_dsid', '1')
 
 
 config.add_section('data')

@@ -39,17 +39,15 @@ total_defectcount = int(data["defect_totalcount"])
 total_executiontime = int(data["total_executiontime"])
 tcexectime_fixed = int(data["tcexectime_fixed"])
 copy_ds_id = run_config["copy_ds_id"]
+run_conf = run_config["run_config"]
 
-
-sheetname_R1 = "R1"
-sheetname_R2 = "R2"
+ds_id_res = ut_ds.getds_id()
 tc_list = []
-total_exectime = 90
-tc_exectime = 15
 worksheetname_executiontime = "TC_Executiontime"
 
-if(copy_ds_id.lower() == copy_ds_id):
-  copied_dsid = run_config["copied_dsid"]
+if(copy_ds_id.lower() == "yes" and run_conf.lower() == "copy"):
+  copied_dsid = run_config["config_copiedfrom"]
+  print(f"config_copiedfrom: {copied_dsid}")
   ds_id = copied_dsid
 else:
   ds_id = ut_ds.getds_id()
@@ -66,7 +64,7 @@ configuration = 3
 
 # contcomp.texualcomparison(configuration)
 us_dict = ut.copy_console('w', contcomp.contentcomparison, ds_id)
-us_list = ut.copy_console('a', createsubset.creation_userstorysubsets, us_dict, usp_threshold)
+us_list = ut.copy_console('a', createsubset.creation_userstorysubsets, us_dict, usp_threshold)    #usp_threshold can be changed from config file
 
 print(us_list)
 
@@ -96,11 +94,12 @@ def creation_defectsubset(tc_list):
 def saving_results():
   result_text = ut.read_from_txt(outputfilename)
   print(f"filename: {outputfilename}")
-  query_updateresults = ut.updatetable_query(dataset_tablename, "results", result_text, "str", ds_id)
+  query_updateresults = ut.updatetable_query(dataset_tablename, "results", result_text, "str", ds_id_res)
   ut_ds.running_insertquery(query_updateresults)
-  json_data = ut_ds.ini_to_json(configfilename)
-  ut_ds.insert_json_data(json_data, ds_id)
 
+def saving_config():
+  json_data = ut_ds.ini_to_json(configfilename)
+  ut_ds.insert_json_data(json_data, ds_id_res)
 
 tc_list = ut.copy_console('a', creation_tcsubset, us_list)
 print(tc_list)
@@ -109,6 +108,6 @@ ut.copy_console('a', createsubset.creatingtcset_fixedexecutiontime, sorted_tcdic
 tcexec_dict = ut.copy_console('a', createsubset.create_tcdict_exectime, tc_list, ds_id)  # Creating a dictionary where TC# is the key and its execution time is the value
 print(f"sorted_tcdict {sorted_tcdict}")
 print(f"tcexec_dict {tcexec_dict}")
-ut.copy_console('a', createsubset.creatingtcset_varyingecutiontime, sorted_tcdict, total_exectime, tcexec_dict)    # Creating a smaller subset of test cases based on the variable exacution time for each test case
+ut.copy_console('a', createsubset.creatingtcset_varyingecutiontime, sorted_tcdict, total_executiontime, tcexec_dict)    # Creating a smaller subset of test cases based on the variable exacution time for each test case
 defect_list = ut.copy_console('a', creation_defectsubset, tc_list)
 saving_results()

@@ -3,6 +3,7 @@ import openpyxl as op
 import configparser
 import sys
 from io import StringIO
+import pandas as pd
 import subprocess
 import utilities_dataset as ut_ds
 
@@ -195,8 +196,8 @@ def updatetable_query(tablemname, columnname, value, dtype, ds_id):
     query = f"UPDATE {tablemname} SET {columnname} = {value} where ds_id='{ds_id}'"
   else:
     query = f"""UPDATE {tablemname} SET {columnname} = "{value}" where ds_id='{ds_id}'"""
-
   return query
+
 
 def write_dsid_totxt(filepath, data):
   with open(filepath, 'r') as file:
@@ -221,6 +222,10 @@ def read_dsid_fromtxt(filepath):
       return lines[1].strip()
     else:
       return "File has less than 2 lines."
+
+def saving_config(configfilename, ds_id_res):
+  json_data = ut_ds.ini_to_json(configfilename)
+  ut_ds.insert_json_data(json_data, ds_id_res)
 
 # data = "ds_id"
 # write_dsid_totxt(txtfilename, data)

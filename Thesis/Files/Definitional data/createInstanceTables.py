@@ -45,7 +45,7 @@ def datasettablecreation_dataset(table_name):   #run_config values will be "new"
               algorithm VARCHAR(200),
               parameters VARCHAR(1000),
               environment VARCHAR(100),
-              results VARCHAR(5000),
+              results VARCHAR(15000),
               ini_file JSON);"""
 
 

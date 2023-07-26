@@ -176,9 +176,24 @@ def json_to_ini(json_data):
   # Add each key-value pair to the 'DEFAULT' section of the .ini file
   for key, value in data_dict.items():
     config[key] = value
-
   with open('copiedconfig.ini', 'w') as configfile:
     config.write(configfile)
+
+
+def read_result(ds_id):
+  query = f"Select results from dataset where ds_id = '{ds_id}'"
+  res = running_searchqury(query)
+  print(f"Result: \n{res[0][0]}")
+
+
+def read_json(ds_id):
+  query = f"Select ini_file from dataset where ds_id = '{ds_id}'"
+  res = running_searchqury(query)
+  print(f"config file: \n{res[0][0]}")
+
+
+# read_result(1)
+# read_json(1)
 
 
 

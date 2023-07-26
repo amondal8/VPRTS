@@ -1,1 +1,1 @@
-copiedconfig.ini
+config1.ini
