@@ -115,6 +115,7 @@ def creatingtcset_fixedexecutiontime(sortedtc_dict, total_exectime, tc_exectime)
             break
     print(f"Subset selected based on the total execution time of {total_time} minutes where each test case is having a fixed execution time of {tc_exectime} minutes: {tcset_fixedexectime}")
     print(f"Total test cases selected with fixed execution time of test cases= {len(tcset_fixedexectime)} out of {len(sortedtc_dict)}")
+    print(f"Selected test cases through our RTS process: {tcset_fixedexectime}")
     return tcset_fixedexectime
 
 
@@ -125,6 +126,7 @@ def creatingtcset_varyingecutiontime(sortedtc_dict, total_exectime, keyval_dict)
     usp_list=[]
     tcexectime_list=[]
     finaltc_list=[]
+    tot_tcexectime = 0
     capacity = total_exectime
     for key in sortedtc_dict:
         tc_list.append(key)
@@ -146,12 +148,13 @@ def creatingtcset_varyingecutiontime(sortedtc_dict, total_exectime, keyval_dict)
         if dp[i][w] != dp[i - 1][w]:
             selected_items.append(i - 1)
             w -= tcexectime_list[i - 1]
+            tot_tcexectime += tcexectime_list[i - 1]
 
     for i in selected_items:
         finaltc_list.append(tc_list[i])
 
     print(f"list of tcs with varying exectime: {sorted(finaltc_list)} and capacity: {dp[n][capacity]} story points out of {sum(sortedtc_dict.values())} story points")
-    print(f"Total tcs selected for varying execution time with an execution window of {total_exectime} mins: {len(finaltc_list)}")
+    print(f"Total tcs selected for varying execution time with an execution window of {total_exectime} minutes: {len(finaltc_list)} which used up a total time of :{tot_tcexectime} minutes")
     return dp[n][capacity], sorted(finaltc_list)
 
     # print(f"Subset selected based on the total execution time of {total_time} minutes where each test case is having a fixed execution time of {tc_exectime} minutes: {tcset_fixedexectime}")

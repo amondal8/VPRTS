@@ -89,8 +89,8 @@ def writematrix(workbook, mat, usr2_list, usr1_list):
             sheetcolcount += 1
     workbook.save(filepath)
 
-def contentcomparison(ds_id):
-
+def contentcomparison(ds_id, importanceval_calconfig):
+    print(f"The content comparison is done of the basis of configuration: {importanceval_calconfig}")
     query_r1 = f"select us_id, us_desc, us_points, us_businessvalue from {usdataset_tablename} where ds_id = '{ds_id}' and release_id in ({rel1})"
     query_r2 = f"select us_id, us_desc, us_points, us_businessvalue from {usdataset_tablename} where ds_id = '{ds_id}' and release_id in ({rel2})"
     # query_cmval = f"select sum(affected_value) from us_cm_map where us_id = '{}' and ds_id = '{ds_id}'"
@@ -106,35 +106,55 @@ def contentcomparison(ds_id):
         for indj, j in enumerate(usr1_res):
             simval = textsimilarity(i[1], j[1])
             # print(f"us2: {i[0]}, us1: {j[0]} have sim value: {simval}")
+            if simval < 0:
+                simval = 0
             mat[indi][indj] = simval
-            if simval >= similarityval_threshold:
-                query_cmval = f"select sum(affected_value) from us_cm_map where us_id = '{j[0]}' and ds_id = '{ds_id}'"
-                # print(f"query: {query_cmval}")
-                cmval_res = ut_ds.running_searchqury(query_cmval)
-                cmval = cmval_res[0][0]
-                # print(f"cmval is: {cmval}")
-                if j[0] in simvalue_dict.keys():
-                    val = simvalue_dict[j[0]]
-                    val += (i[2]+i[3]+(cmval*(j[2]+j[3])))
-                    # print(val)
-                    # print(cmval*val)
-                    simvalue_dict[j[0]] = val
-                else:
-                    simvalue_dict[j[0]] = (i[2]+i[3]+(cmval*(j[2]+j[3])))
 
-    print(f"User stories with cumulative value after similarity measure: {simvalue_dict}")
+            # ******************
 
+            # if simval >= similarityval_threshold:
+            #     query_cmval = f"select sum(affected_value) from us_cm_map where us_id = '{j[0]}' and ds_id = '{ds_id}'"
+            #     # print(f"query: {query_cmval}")
+            #     cmval_res = ut_ds.running_searchqury(query_cmval)
+            #     cmval = cmval_res[0][0]
+            #     # print(f"cmval is: {cmval}")
+            #     if j[0] in simvalue_dict.keys():
+            #         val = simvalue_dict[j[0]]
+            #         if importanceval_calconfig == "3":
+            #             val += (i[2]+i[3]+(cmval*(j[2]+j[3])))
+            #         elif importanceval_calconfig == "1":
+            #             val += cmval*(i[2] + i[3])
+            #         elif importanceval_calconfig == "4":
+            #             val += simval*(j[2]+j[3] + (cmval * (i[2] + i[3])))     #cmval to be calculated for R2 not R1
+            #         # print(val)
+            #         # print(cmval*val)
+            #         simvalue_dict[j[0]] = val
+            #     else:
+            #         if importanceval_calconfig == "3":
+            #             simvalue_dict[j[0]] = (i[2]+i[3]+(cmval*(j[2]+j[3])))
+            #         elif importanceval_calconfig == "1":
+            #             simvalue_dict[j[0]] = cmval*(i[2] + i[3])
+            #         elif importanceval_calconfig == "4":
+            #             simvalue_dict[j[0]] = simval * (j[2] + j[3] + (cmval * (i[2] + i[3])))
+
+            # **************************
+
+    # print(f"User stories with cumulative value after similarity measure: {simvalue_dict}")
+
+    impvalue_dict = ut_ds.importanceval_fortc(ds_id, mat, usr2_list, usr1_list, importanceval_calconfig)
     writematrix(workbook, mat, usr2_list, usr1_list)
+    # simval_dict = ut_ds.simval_config(mat,usr1_list,usr2_list)
+
+
+
     # for i in mat:
     #     print(i)
+    # print(simvalue_dict)
+    sorted_impvaldict = {k: v for k, v in sorted(impvalue_dict.items(), key=lambda item: item[1], reverse = True)}
+    print(f"sorted us_dict{sorted_impvaldict}")
+    return sorted_impvaldict
 
-    return simvalue_dict
-
-# contentcomparison(1)
-
-
-
-
+# contentcomparison("1", "1.1")
 
 
 def writeto_excel(cell, value):

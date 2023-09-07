@@ -2,6 +2,8 @@ import mysql.connector
 import openpyxl as op
 import configparser
 import json
+import utilities as ut
+
 
 file = "ini1"
 config = configparser.ConfigParser()
@@ -191,6 +193,84 @@ def read_json(ds_id):
   res = running_searchqury(query)
   print(f"config file: \n{res[0][0]}")
 
+
+def getvalue_fromcol(matrix, colind):
+  column_value_list = []
+
+  for row in matrix:
+    val = row[colind]
+    column_value_list.append(val)
+  return column_value_list
+
+def normalized_list(raw_list):
+  normalizer = 1/sum(raw_list)
+  norm_list = [float(i) * normalizer for i in raw_list]
+  return norm_list
+
+# def normalized_list(raw_list):
+#   min_value = min(raw_list)
+#   max_value = max(raw_list)
+#   scaled = [(x - min_value) / (max_value - min_value) for x in raw_list]
+#   return scaled
+
+def simval_config(mat, us1_list):
+  simval_dict = {}
+  simval_list = []
+  for indj, j in enumerate(us1_list):
+      val_list = getvalue_fromcol(mat, indj)
+      sum_val = sum(val_list)
+      simval_list.append(sum_val)
+  norm_simval = normalized_list(simval_list)
+  # print(f"sum of normed: {sum(norm_simval)}")
+  for indj, j in enumerate(us1_list):
+    simval_dict[j] = norm_simval[indj]
+  return simval_dict
+
+
+def importanceval_fortc(ds_id, mat, us2_list, us1_list, runconfig):
+  print(us1_list)
+  print(us2_list)
+  bvvalr1list_raw = []
+  bvvalr2list_raw = []
+  cmvallist_raw = []
+  impval_dict = {}
+  for i in us1_list:
+    query = f"Select us_businessvalue from userstory_datasettable where us_id = '{i}' and ds_id = '{ds_id}'"
+    res = running_searchqury(query)
+    bvvalr1list_raw.append(res[0][0])
+  bvvalr1_list = normalized_list(bvvalr1list_raw)
+  for i in us2_list:
+    query1 = f"Select us_businessvalue from userstory_datasettable where us_id = '{i}' and ds_id = '{ds_id}'"
+    query2 = f"select sum(affected_value) from us_cm_map where us_id in ('{i}') and ds_id = '{ds_id}' group by us_id;"
+    res1 = running_searchqury(query1)
+    res2 = running_searchqury(query2)
+    bvvalr2list_raw.append(res1[0][0])
+    cmvallist_raw.append(res2[0][0])
+  cmval_list = normalized_list(cmvallist_raw)
+  bvvalr2_list = normalized_list(bvvalr2list_raw)
+  print(f"normalized business value: {bvvalr2_list}")
+  # print(f"cmval_list:{cmval_list}, sum of the list:{sum(cmval_list)}")
+  # print(f"bvvalr2_list:{bvvalr2_list}, sum of the list:{sum(bvvalr2_list)}")
+  for indj, j in enumerate(us1_list):
+      val_list = getvalue_fromcol(mat, indj)
+      # print(f"Sim val_list: {val_list}")
+      importance_val=0
+      for indk, k in enumerate(val_list):
+        if runconfig == "1.1":          #Considering bv of current user stories
+          importance_val += k*bvvalr2_list[indk]
+        elif runconfig == "1.2":        #Considering bv of previous user stories
+          importance_val += k*bvvalr1_list[indj]
+        elif runconfig == "1.3":        #Combining bv of current and previous user stories
+          importance_val += k * bvvalr2_list[indk] * bvvalr1_list[indj]
+        elif runconfig == "0":          #Calculating only sim val: This is for comparing with our result
+          simval_dict = simval_config(mat, us1_list)
+          sorted_simvaldict = {k: v for k, v in sorted(simval_dict.items(), key=lambda item: item[1], reverse=True)}
+          return sorted_simvaldict
+        elif runconfig == "2":          # This is combining code modification with 1.1
+          importance_val += k*cmval_list[indk]*bvvalr2_list[indk]
+      impval_dict[j] = importance_val
+  # print(impval_dict)
+  return impval_dict
 
 # read_result(1)
 # read_json(1)

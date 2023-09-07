@@ -128,7 +128,6 @@ def create_searchquery(us_list, colname, tablename, searchcolname, ds_id, prefix
     else:
       us_str = us_str+"\"" + prefix + str(i) + "\","
   query = f"""SELECT DISTINCT {colname} from {tablename} where {searchcolname} in ({us_str}) and ds_id = "{ds_id}"; """
-  # print(query)
   return query
 
 def running_searchqury(query):

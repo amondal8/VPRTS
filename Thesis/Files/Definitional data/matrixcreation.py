@@ -56,6 +56,49 @@ def generate_adjmat_onetomany_withlimits(num_rows, num_columns, limiting_ones, c
     return adjacency_matrix
 
 
+def generate_adjmat_onetomany_withconfig(num_rows, num_columns, limiting_ones, config, connection_probability=1.0):
+
+    # Initialize an empty adjacency matrix
+    adjacency_matrix = [[0 for _ in range(num_columns)] for _ in range(num_rows)]
+    row_low = 0
+    row_high = 0
+    if config.lower() == "top":
+        row_low = 0
+        row_high = int(num_rows/4)
+    elif config.lower() == "bottom":
+        row_low = int((3*num_rows)/4)
+        row_high = num_rows-1
+    elif config.lower() == "center":
+        row_low = int((num_rows) / 2)
+        row_high = int((3 * num_rows) / 4)
+    upper_lim = int(num_columns/6)
+    print(f"row_low: {row_low}")
+    print(f"row_high: {row_high}")
+    print(f"upper_lim: {upper_lim}")
+
+    # Keep track of "many" entities that have already been connected to a "one" entity
+    used_many_entities = set()
+
+    # Fill in the matrix based on the connection probability and max_ones_per_row
+    for one_index in range(num_rows):
+        if (one_index >= row_low and one_index < row_high) and (config.lower() == "top" or config.lower() == "bottom" or config.lower() == "center"):
+            max_ones_per_row = upper_lim
+        else:
+            max_ones_per_row = random.randint(1, limiting_ones)  # Maximum number of ones per row
+        # print(f"max_ones_per_row: {max_ones_per_row}")
+        ones_count = 0
+        for many_index in range(num_columns):
+            if many_index in used_many_entities:
+                continue
+            if ones_count >= max_ones_per_row:
+                break
+            if random.random() <= connection_probability:
+                adjacency_matrix[one_index][many_index] = 1
+                used_many_entities.add(many_index)
+                ones_count += 1
+
+    return adjacency_matrix
+
 def writematto_reqmappingexcel(adj_mat):
 
     workbook = op.load_workbook(filepath)
@@ -133,8 +176,8 @@ def generate_tccmmap_adjmat_withlimits(us_count,cm_count,connection_prob,lower_l
     uscm_matrixfin = np.zeros((n_rows, n_cols), dtype=np.float64)
     uscm_matrixfin = uscm_matrix.astype(np.float64)
     res_mat = replace_ones_with_random(uscm_matrixfin)
-    for i in uscm_matrixfin:
-        print(i)
+    # for i in uscm_matrixfin:
+    #     print(i)
     print("Mapping matrix with affected values ahve been generated between Userstory and Code modification ")
     return uscm_matrixfin
 
@@ -150,6 +193,83 @@ def replace_ones_with_random(matrix):
                 random_number = round(random.uniform(0, 1),5)
                 matrix[i][j] = random_number
 
+    return matrix
+
+def generate_custom_adjacency_matrix(rows, columns, prob_thres, config):
+    matrix = [[0 for _ in range(columns)] for _ in range(rows)]
+    if config=="lefttop":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0,0,rows/2-1,columns/2-1]
+    elif config=="righttop":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0,columns/2,rows/2-1,columns-1]
+    elif config=="leftbottom":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [rows/2,0,rows-1,columns/2-1]
+    elif config=="rightbottom":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [rows/2,columns/2,rows-1,columns-1]
+    elif config=="leftbound":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0,0,rows-1,columns/2-1]
+    elif config=="rightbound":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0,columns/2,rows-1,columns-1]
+    elif config=="center":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [rows / 4 - 1, columns / 4 - 1,
+                                                                            (3 * rows) / 4, (3 * columns) / 4]
+    elif config=="topbound":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0,0,rows/2-1,columns-1]
+    elif config == "bottombound":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [rows/2, 0, rows- 1, columns - 1]
+
+
+    for i in range(rows):
+        for j in range(columns):
+            if top_left_row <= i <= bottom_right_row and top_left_column <= j <= bottom_right_column:
+                # Set ones in the specified area
+                matrix[i][j] = 1
+            else:
+                # Set zeros outside the specified area
+                prob = np.random.rand()
+                if(prob<prob_thres):
+                    matrix[i][j] = 0
+                else:
+                    matrix[i][j] = 1
+    return matrix
+
+
+def generate_custom_adjacency_matrix_uscm(rows, columns, prob_thres, config):
+    matrix = [[0 for _ in range(columns)] for _ in range(rows)]
+    if config=="lefttop":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0,0,rows/2-1,columns/2-1]
+    elif config=="righttop":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0,columns/2,rows/2-1,columns-1]
+    elif config=="leftbottom":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [rows/2,0,rows-1,columns/2-1]
+    elif config=="rightbottom":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [rows/2,columns/2,rows-1,columns-1]
+    elif config=="leftbound":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0,0,rows-1,columns/2-1]
+    elif config=="rightbound":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0,columns/2,rows-1,columns-1]
+    elif config=="center":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [rows / 4 - 1, columns / 4 - 1,
+                                                                            (3 * rows) / 4, (3 * columns) / 4]
+    elif config == "topbound":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [0, 0, rows / 2 - 1, columns - 1]
+    elif config == "bottombound":
+        top_left_row, top_left_column, bottom_right_row, bottom_right_column = [rows / 2, 0, rows - 1, columns - 1]
+
+
+    for i in range(rows):
+        for j in range(columns):
+            val = np.random.rand()
+            if top_left_row <= i <= bottom_right_row and top_left_column <= j <= bottom_right_column:
+                # Set ones in the specified area
+                matrix[i][j] = val
+            else:
+                # Set zeros outside the specified area
+                prob = np.random.rand()
+                if(prob>prob_thres):
+                    matrix[i][j] = val
+                    print(prob)
+                # else:
+                #     matrix[i][j] = 0
     return matrix
 
 # adj_matrix = generate_random_adjmat_withlimits(total_uscount,total_tccount,connection_prob,limiting_ones)

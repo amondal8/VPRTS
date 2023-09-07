@@ -1,15 +1,16 @@
+import final_implementation1 as fi
+import random
+
+import mysql.connector
 import configparser
+import openpyxl as op
+import utilities as ut
+import utilities_dataset as ut_ds
+from datetime import datetime
+import pandas as pd
+import contextualComparison_usingdb as contcomp
+import creatingsubsets as createsubset
 
-config = configparser.ConfigParser()
-config.read('config1.ini')
-run_config = config['run_configuration']
+# us_dict = ut.copy_console('w', contcomp.contentcomparison, ds_id, importanceval_calconfig)
 
-import config_initialsetup
-if run_config["run_config"].lower() == "copy" and run_config["copy_ds_id"].lower() == "yes":
-    print("config1")
-    import final_implementation
-else:
-    print("config2")
-    import fill_datasettables
-    import fill_mappingtables
-    import final_implementation
+

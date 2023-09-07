@@ -10,7 +10,7 @@ import creatingsubsets as createsubset
 
 outputfilename = "output.txt"
 inifilename_stored = "inifile_name.txt"
-filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+filepath = "/Thesis/Files/Database Creation/Mapping.xlsx"
 config = configparser.ConfigParser()
 configfilename = ut.read_from_txt(inifilename_stored)
 config.read(configfilename)
@@ -40,7 +40,12 @@ total_executiontime = int(data["total_executiontime"])
 tcexectime_fixed = int(data["tcexectime_fixed"])
 copy_ds_id = run_config["copy_ds_id"]
 run_conf = run_config["run_config"]
+next_id = ut_ds.getds_id()
+# importanceval_calconfig = data["importanceval_calconfig"]
+# if importanceval_calconfig not in ["1","2"]:
+#   importanceval_calconfig = "1"
 
+importanceval_calconfig = "2"
 ds_id_res = ut_ds.getds_id()
 tc_list = []
 worksheetname_executiontime = "TC_Executiontime"
@@ -57,16 +62,14 @@ else:
 # of the user story and how it is carried to the other user stories
 # configuration=1        -> when the value of R2 is carried to R1
 # configuration=2        -> when the value of R1 is carried to R2
-# configuration=3        -> when the value of R1 + R2 is carried and placed beside R1
+# configuration=3        -> when the value of R1 + R2 is carried and placed beside R1 multiplied with cm val
 # configuration=4        -> when the value of R2 is carried to R1 with weight of similarity value being considered
 
-configuration = 3
 
-# contcomp.texualcomparison(configuration)
-us_dict = ut.copy_console('w', contcomp.contentcomparison, ds_id)
+us_dict = ut.copy_console('w', contcomp.contentcomparison, ds_id, importanceval_calconfig)
 us_list = ut.copy_console('a', createsubset.creation_userstorysubsets, us_dict, usp_threshold)    #usp_threshold can be changed from config file
 
-print(us_list)
+print(f"us_list: {us_list}")
 
 def creation_tcsubset(us_list):
   query = ut.create_searchquery(us_list, "tc_id", ustcmap_tablename, "us_id", ds_id, "")
@@ -102,7 +105,7 @@ def saving_config():
   ut_ds.insert_json_data(json_data, ds_id_res)
 
 tc_list = ut.copy_console('a', creation_tcsubset, us_list)
-print(tc_list)
+print(f"tc_list:{tc_list}")
 sorted_tcdict = ut.copy_console('a',ut_ds.creating_prioritydict_tclist,tc_list, ds_id)
 ut.copy_console('a', createsubset.creatingtcset_fixedexecutiontime, sorted_tcdict, total_executiontime, tcexectime_fixed)
 tcexec_dict = ut.copy_console('a', createsubset.create_tcdict_exectime, tc_list, ds_id)  # Creating a dictionary where TC# is the key and its execution time is the value
@@ -110,4 +113,6 @@ print(f"sorted_tcdict {sorted_tcdict}")
 print(f"tcexec_dict {tcexec_dict}")
 ut.copy_console('a', createsubset.creatingtcset_varyingecutiontime, sorted_tcdict, total_executiontime, tcexec_dict)    # Creating a smaller subset of test cases based on the variable exacution time for each test case
 defect_list = ut.copy_console('a', creation_defectsubset, tc_list)
-saving_results()
+# saving_results()
+# ut.saving_config(configfilename, next_id)
+

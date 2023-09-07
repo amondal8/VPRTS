@@ -85,7 +85,6 @@ def datasettablecreation_cm(table_name):
   return f"""CREATE TABLE {table_name}(
               ds_id VARCHAR(10),
               cm_id VARCHAR(10),
-              release_id INT,
               FOREIGN KEY (cm_id) REFERENCES {definitional_database}.{codemodule_tablename} (cm_id));"""
 
 

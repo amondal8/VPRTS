@@ -211,25 +211,24 @@ def insertingvalue_definsttable(defid_list, defsev_list, defpri_list, defcom_lis
 
 
 def fillinsttable_cminsttable():
-  cols = ['ds_id', 'cm_id', 'release_id']
-  dtype = ['str', 'str', 'int']
+  cols = ['ds_id', 'cm_id']
+  dtype = ['str', 'str']
 
-  total_relid = data['release1'] + "," + data['release2']
-  rel_id = total_relid.split(",")
+  # total_relid = data['release1'] + "," + data['release2']
+  # rel_id = total_relid.split(",")
   cmid_query = "select cm_id from code_module"
   cmid_res = ut.running_searchqury(cmid_query)
   cmid_list = ut.createlist_fromdbresult(cmid_res, 0)
   cmlist_final = random.sample(cmid_list, cm_count)
   print(cmlist_final)
-  insertingvalue_cminsttable(cmlist_final, rel_id, cmdatasettable_tablename, cols, dtype)
+  insertingvalue_cminsttable(cmlist_final, cmdatasettable_tablename, cols, dtype)
 
 
-def insertingvalue_cminsttable(cmlist_final, rel_id, tablename, cols, dtype):
+def insertingvalue_cminsttable(cmlist_final, tablename, cols, dtype):
   for ind, i in enumerate(cmlist_final):
     cmid_val = i
-    reid_val = random.choice(rel_id)
 
-    vals = [next_id, cmid_val, reid_val]
+    vals = [next_id, cmid_val]
     query = ut.insertquery_creation(tablename, cols, vals, dtype)
     print(f"query is : {query}")
     ut_ds.running_insertquery(query)

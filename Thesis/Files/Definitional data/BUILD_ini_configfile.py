@@ -46,9 +46,14 @@ config.add_section('run_configuration')
 config.set('run_configuration', 'run_config', 'new')        #Values set to "new" or "copy"
 config.set('run_configuration', 'config_copiedfrom', 'null')    #When value of "run_config" is set to "copy"
 config.set('run_configuration', 'copy_ds_id', 'yes')
-
+config.set('run_configuration', 'matrix_build_config_uscm', 'even')   #even or composite distribution
+config.set('run_configuration', 'matrix_build_configtype_uscm', 'center')    #center, Leftbound, rightbound, lefttop, righttop, leftbottom, rightbottom
+config.set('run_configuration', 'matrix_build_config_tcdefect', 'even')   #even or composite distribution
+config.set('run_configuration', 'matrix_build_configtype_tcdefect', 'center')    #center, Leftbound, rightbound, lefttop, righttop, leftbottom, rightbottom
+config.set('run_configuration', 'matrix_build_configtype_ustc', 'even')    #center, top, bottom, even
 
 config.add_section('data')
+config.set('data', 'importanceval_calconfig', '1')      #Values can be 1 or 2
 config.set('data', 'project_id', '1')
 config.set('data', 'usp_threshold', '0')
 config.set('data', 'us_totalcount', '20')
@@ -66,6 +71,8 @@ config.set('data', 'limiting_ones', '6')
 config.set('data', 'similarityval_threshold', '.80')
 config.set('data', 'total_executiontime', '90')
 config.set('data', 'tcexectime_fixed', '15')
+config.set('data', 'tcdefect_map_probthreshold', '.7')
+config.set('data', 'uscm_map_probthreshold', '.7')
 
 
 with open('config1.ini', 'w') as config_file:
