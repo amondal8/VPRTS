@@ -1,7 +1,11 @@
 import random
 from sklearn import preprocessing as im
 import pyautogui as pg
-
+import utilities as ut
+import utilities_dataset as ut_ds
+import contextualComparison_usingdb as cc
+import numpy as np
+import matplotlib.pyplot as plt
 
 def generate_adjmat_onetomany_withconfig(num_rows, num_columns, limiting_ones, config, connection_probability=1.0):
 
@@ -113,3 +117,21 @@ def generate_adjmat_onetomany_withconfig(num_rows, num_columns, limiting_ones, c
 #     # Print the similarity score
 #     print(f"Similarity Score: {similarity_score}")
 
+
+
+query = f"select us_desc from userstory"
+result = ut.running_searchqury(query)
+list1 = list2 = ut.createlist_fromdbresult(result,0)
+mat = [[0 for i in range(len(list1))] for j in range(len(list1))]
+# for indi,i in enumerate(list1):
+#     print(f"{indi}{i}")
+
+for indi, i in enumerate(list1):
+    for indj, j in enumerate(list2):
+        simval = cc.textsimilarity(i, j)
+        if simval < 0:
+            simval = 0
+        mat[indi][indj] = simval
+#
+for i in mat:
+    print(i)

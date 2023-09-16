@@ -2,7 +2,8 @@ import mysql.connector
 import openpyxl as op
 import configparser
 import json
-import utilities as ut
+
+
 
 
 file = "ini1"
@@ -22,6 +23,11 @@ mydb = mysql.connector.connect(
 
 filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
+
+filepath_saveresults = "C:/Users/amondal8/Desktop/Aniruddha/Thesis/Datasets/My dataset/Results/Comparison against Random Selection.xlsx"
+workbook_res = op.load_workbook(filepath_saveresults)
+saveresults_sheetname = "RQ1_Run4"
+
 
 def getds_id():
   print(dbconnect["database"])
@@ -272,10 +278,46 @@ def importanceval_fortc(ds_id, mat, us2_list, us1_list, runconfig):
   # print(impval_dict)
   return impval_dict
 
+
+def writeconfigs_to_excel(colindex, col, value):
+
+  worksheet_res = workbook_res[saveresults_sheetname]
+  column = worksheet_res[col]
+  # print(f"len for col{col}: {len(column)}")
+
+  if colindex == "next":
+    next_row = len(column) + 1
+  else:
+    next_row = len(column)
+  cell = worksheet_res[f'{col}{next_row}']
+  cell.value = value
+  workbook_res.save(filepath_saveresults)
+
+
+def readandwrite_toexcel(readval, col, writeval):
+  worksheet_res = workbook_res[saveresults_sheetname]
+  row = 0
+  readcol = "A"
+  column = worksheet_res[readcol]
+  for i in range(len(column)):
+    cell = worksheet_res[f'{readcol}{i+1}']
+    if str(cell.value) == readval:
+      row = i+1
+      break
+  print(f"Row: {row}, col: {col}")
+  cell1 = worksheet_res[f'{col}{row}']
+  cell1.value = writeval
+  workbook_res.save(filepath_saveresults)
+
+
+def commitconnection():
+  mydb.commit()
+
 # read_result(1)
 # read_json(1)
 
-
+# writeconfigs_to_excel("next", 'A', "Value1")
+# writeconfigs_to_excel("same", 'B', "Value2")
 
 
 # json_data = ini_to_json("config1.ini")

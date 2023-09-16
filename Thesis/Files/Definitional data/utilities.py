@@ -226,6 +226,12 @@ def saving_config(configfilename, ds_id_res):
   json_data = ut_ds.ini_to_json(configfilename)
   ut_ds.insert_json_data(json_data, ds_id_res)
 
+
+def writetonotepad(opentype, value, filename):
+  with open(filename, opentype) as file:
+    file.write(value)
+
+
 # data = "ds_id"
 # write_dsid_totxt(txtfilename, data)
 

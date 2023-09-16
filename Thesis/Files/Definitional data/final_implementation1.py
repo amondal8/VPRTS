@@ -43,21 +43,30 @@ tcexectime_fixed = int(data["tcexectime_fixed"])
 copy_ds_id = run_config["copy_ds_id"]
 run_conf = run_config["run_config"]
 next_id = ut_ds.getds_id()
+
 # importanceval_calconfig = data["importanceval_calconfig"]
 # if importanceval_calconfig not in ["1","2"]:
 #   importanceval_calconfig = "1"
+valuepreserved_col = ""
+importanceval_calconfig = ["1.1"]
+# ,"1.2","1.3","0"
+dsid_list = ["21"]
+total_executiontime_list = [4100,2500,360,1200,500,3000,1700]
 
-importanceval_calconfig = "0"
+
+# ,"1.2","1.3","0"
 # ds_id_res = ut_ds.getds_id()
-ds_id_res = "1"
+# ds_id_res = ds_id = "22"
 worksheetname_executiontime = "TC_Executiontime"
 
-if(copy_ds_id.lower() == "yes" and run_conf.lower() == "copy"):
-  copied_dsid = run_config["config_copiedfrom"]
-  print(f"config_copiedfrom: {copied_dsid}")
-  ds_id = copied_dsid
-else:
-  ds_id = ut_ds.getds_id()
+# if(copy_ds_id.lower() == "yes" and run_conf.lower() == "copy"):
+#   copied_dsid = run_config["config_copiedfrom"]
+#   print(f"config_copiedfrom: {copied_dsid}")
+#   ds_id = copied_dsid
+# else:
+#   ds_id = ut_ds.getds_id()
+
+
 
 
 # Configuration is the  way we want to calculate the cumulative value
@@ -67,12 +76,14 @@ else:
 # configuration=3        -> when the value of R1 + R2 is carried and placed beside R1 multiplied with cm val
 # configuration=4        -> when the value of R2 is carried to R1 with weight of similarity value being considered
 
-us_dict = ut.copy_console('w', contcomp.contentcomparison, ds_id, importanceval_calconfig)
+def get_usdict(ds_id, importanceval_calconfig):
+  us_dict = ut.copy_console('w', contcomp.contentcomparison, ds_id, importanceval_calconfig)
+  return us_dict
 # us_list = ut.copy_console('a', createsubset.creation_userstorysubsets, us_dict, usp_threshold)    #usp_threshold can be changed from config file
 
-print(f"us_dict: {us_dict}")
+# print(f"us_dict: {us_dict}")
 
-def creation_tcsubset(us_dict):
+def creation_tcsubset(us_dict, ds_id):
   tc_dict = {}
   for key in us_dict:
     # print(key)
@@ -82,7 +93,7 @@ def creation_tcsubset(us_dict):
     for i in result:
       # print(i[0])
       tc_dict[i[0]] = us_dict[key]
-  print(f"Printing the test cases based on the importance value calculated for the user stories:{tc_dict}")
+  print(f"Printing the test cases based on the importance value calculated for the user stories:{len(tc_dict)}{tc_dict}")
   tc_list = list(tc_dict.keys())
   return (tc_dict, tc_list)
   # query = ut.create_searchquery(us_list, "tc_id", ustcmap_tablename, "us_id", ds_id, "")
@@ -96,7 +107,7 @@ def creation_tcsubset(us_dict):
   # return sorted(tc_list)
 
 
-def creation_defectsubset(tc_list):
+def creation_defectsubset(tc_list, ds_id):
   query = ut.create_searchquery(tc_list, "defect_id", tcdefectmap_tablename, "tc_id", ds_id,  "")
   result = ut_ds.running_searchqury(query)
   defect_list = []
@@ -107,7 +118,7 @@ def creation_defectsubset(tc_list):
   return sorted(defect_list)
 
 
-def measuring_valuepreserved(us_list, tc_list):
+def measuring_valuepreserved(us_list, tc_list, ds_id):
   totalvalue_preserved = 0
   for i in us_list:
     query1 = f"Select tc_id from us_tc_map where us_id = {i} and ds_id = '{ds_id}'"
@@ -125,14 +136,19 @@ def measuring_valuepreserved(us_list, tc_list):
       # else:
       #   print(f"All not present for us_id: {i} where temptc_list is: {temptc_list}")
   print(f"totalvalue_preserved: {totalvalue_preserved} out of {result3[0][0]}")
+  return totalvalue_preserved, result3[0][0]
 
-def runningalgo_fixedtime_randomselection(totalexectime, tcexectime_fixed, us_list):
+def runningalgo_fixedtime_randomselection(totalexectime, tcexectime_fixed, us_list, ds_id):
+  print("inside random algo")
   query = f"Select tc_id from us_tc_map where us_id in ({str(us_list).replace('[', '').replace(']', '')}) and ds_id = '{ds_id}'"
   result = ut_ds.running_searchqury(query)
   total_tclist = ut.createlist_fromdbresult(result,0)
   # print(len(total_tclist), total_tclist)
   total_allowedtc = int(totalexectime/tcexectime_fixed)
-  selectedtc_list = random.sample(total_tclist,total_allowedtc)
+  if total_allowedtc<len(total_tclist):
+    selectedtc_list = random.sample(total_tclist,total_allowedtc)
+  else:
+    selectedtc_list = total_tclist
   # print(f"selectedtc_list: {len(selectedtc_list), selectedtc_list}")
   print("Running Random selection process for RTS:")
   print(f"Total test cases selected with fixed execution time of test cases= {len(selectedtc_list)} out of {len(total_tclist)}")
@@ -140,7 +156,7 @@ def runningalgo_fixedtime_randomselection(totalexectime, tcexectime_fixed, us_li
   return selectedtc_list
 
 
-def saving_results(runconfig):
+def saving_results(runconfig, ds_id):
   if runconfig == "2":
     col_name = "results"
   elif runconfig == "1.1":
@@ -153,7 +169,7 @@ def saving_results(runconfig):
     col_name = "results_config0"
   result_text = ut.read_from_txt(outputfilename)
   print(f"filename: {outputfilename}")
-  query_updateresults = ut.updatetable_query(dataset_tablename, col_name, result_text, "str", ds_id_res)
+  query_updateresults = ut.updatetable_query(dataset_tablename, col_name, result_text, "str", ds_id)
   ut_ds.running_insertquery(query_updateresults)
 
 # def saving_results_forconfig1():
@@ -181,19 +197,39 @@ def saving_results(runconfig):
 #   ut_ds.running_insertquery(query_updateresults)
 
 
-def saving_config():
+def saving_config(ds_id):
   json_data = ut_ds.ini_to_json(configfilename)
-  ut_ds.insert_json_data(json_data, ds_id_res)
+  ut_ds.insert_json_data(json_data, ds_id)
 
-
-us_list = list(us_dict.keys())
-tc_dict, tc_list = ut.copy_console('a', creation_tcsubset, us_dict)
-# # sorted_tcdict = ut.copy_console('a',ut_ds.creating_prioritydict_tclist,tc_list, ds_id)
-tcset_fixedexectime = ut.copy_console('a', createsubset.creatingtcset_fixedexecutiontime, tc_dict, total_executiontime, tcexectime_fixed)
-ut.copy_console('a', measuring_valuepreserved, us_list, tcset_fixedexectime)
-tcset_fixedexectime_randomselection = ut.copy_console('a', runningalgo_fixedtime_randomselection, total_executiontime, tcexectime_fixed, us_list)
-ut.copy_console('a', measuring_valuepreserved, us_list, tcset_fixedexectime_randomselection)
-
+for indi, i in enumerate(dsid_list):
+  ds_id_res = ds_id = i
+  total_executiontime = total_executiontime_list[indi]
+  for j in importanceval_calconfig:
+    print(f"ds_id: {ds_id}, computation configuration: {j}, total execution window: {total_executiontime}")
+    us_dict = get_usdict(ds_id, j)
+    us_list = list(us_dict.keys())
+    tc_dict, tc_list = ut.copy_console('a', creation_tcsubset, us_dict, ds_id)
+    # sorted_tcdict = ut.copy_console('a',ut_ds.creating_prioritydict_tclist,tc_list, ds_id)
+    tcset_fixedexectime = ut.copy_console('a', createsubset.creatingtcset_fixedexecutiontime, tc_dict, total_executiontime, tcexectime_fixed)
+    ut_ds.readandwrite_toexcel(ds_id, "J", tcexectime_fixed)
+    ut_ds.readandwrite_toexcel(ds_id, "K", total_executiontime)
+    ut_ds.readandwrite_toexcel(ds_id, "L", len(tcset_fixedexectime))
+    value_preserved, totalvalue = ut.copy_console('a', measuring_valuepreserved, us_list, tcset_fixedexectime, ds_id)
+    ut_ds.readandwrite_toexcel(ds_id, "M", totalvalue)
+    if j == "1.1":
+      valuepreserved_col = "N"
+    elif j == "1.2":
+      valuepreserved_col = "O"
+    elif j == "1.3":
+      valuepreserved_col = "P"
+    elif j == "0":
+      valuepreserved_col = "Q"
+    ut_ds.readandwrite_toexcel(ds_id, valuepreserved_col, value_preserved)
+    tcset_fixedexectime_randomselection = ut.copy_console('a', runningalgo_fixedtime_randomselection, total_executiontime, tcexectime_fixed, us_list, ds_id)
+    print(tcset_fixedexectime_randomselection)
+    value_preserved_random, total_value = ut.copy_console('a', measuring_valuepreserved, us_list, tcset_fixedexectime_randomselection, ds_id)
+    ut_ds.readandwrite_toexcel(ds_id, "R", value_preserved_random)
+    saving_results(j, ds_id)
 
 # tcexec_dict = ut.copy_console('a', createsubset.create_tcdict_exectime, tc_list, ds_id)  # Creating a dictionary where TC# is the key and its execution time is the value
 # print(f"sorted_tcdict {tc_dict}")

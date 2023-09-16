@@ -43,7 +43,7 @@ matrix_build_configtype_ustc = run_config["matrix_build_configtype_ustc"]
 copy_ds_id = run_config["copy_ds_id"]
 run_conf = run_config["run_config"]
 next_id = ut_ds.getds_id()
-# next_id = ""
+# next_id = "21"
 if copy_ds_id.lower() == "yes" and run_conf.lower() == "copy":
     copied_dsid = run_config["config_copiedfrom"]
     print(f"config_copiedfrom: {copied_dsid}")
@@ -51,15 +51,21 @@ if copy_ds_id.lower() == "yes" and run_conf.lower() == "copy":
 else:
     ds_id = ut_ds.getds_id()
 
+
 print(f"matrix_build_config_tcdefect: {matrix_build_config_tcdefect}")
 
 
-adj_matrixtcmap = matc.generate_adjmat_onetomany_withconfig(uscount_r1, tc_count, limiting_ones, matrix_build_configtype_ustc, connection_probability=.3)
-if matrix_build_config_tcdefect.lower() == "even":
-    adj_matrixdefectmap = defmap.generate_defectmap_adjmat_withlimits(tc_count, defect_count, connection_prob=.5, lower_limitones=0, upper_limitones=4)
-elif matrix_build_config_tcdefect.lower() == "composite":
-    matrix_build_configtype_tcdefect = run_config["matrix_build_configtype_tcdefect"]
-    adj_matrixdefectmap = matc.generate_custom_adjacency_matrix(tc_count,defect_count,tcdefect_map_probthreshold,matrix_build_configtype_tcdefect)
+def runningmats():
+    print(f"uscount: {uscount_r1} and tccount: {tc_count}")
+    adj_matrixtcmap = matc.generate_adjmat_onetomany_withlimits(uscount_r1, tc_count, limiting_ones, connection_probability=.3)
+    if matrix_build_config_tcdefect.lower() == "even":
+        adj_matrixdefectmap = defmap.generate_defectmap_adjmat_withlimits(tc_count, defect_count, connection_prob=.5, lower_limitones=0, upper_limitones=4)
+    elif matrix_build_config_tcdefect.lower() == "composite":
+        matrix_build_configtype_tcdefect = run_config["matrix_build_configtype_tcdefect"]
+        adj_matrixdefectmap = matc.generate_custom_adjacency_matrix(tc_count,defect_count,tcdefect_map_probthreshold,matrix_build_configtype_tcdefect)
+
+    return adj_matrixtcmap, adj_matrixdefectmap
+
 # print(f"Defect mat is: ")
 # for row in adj_matrixdefectmap:
 #     print(row)
@@ -67,7 +73,8 @@ elif matrix_build_config_tcdefect.lower() == "composite":
 # matc.writematto_reqmappingexcel(adj_matrixtcmap)
 # matc.writeto_revReqMat_excel(adj_matrixtcmap)
 
-def fillmappingtable_ustcmap():
+def fillmappingtable_ustcmap(adj_matrixtcmap):
+    print(f"next_id: {next_id} and ds_id: {ds_id}")
     # print(adj_matrixtcmap)
     cols = ['us_id', 'tc_id', 'ds_id']
     dtype = ['str', 'str', 'str']
@@ -80,19 +87,25 @@ def fillmappingtable_ustcmap():
 
     usid_list = ut.createlist_fromdbresult(usid_res, 0)
     tcid_list = ut.createlist_fromdbresult(tcid_res, 0)
-
+    for i in adj_matrixtcmap:
+        print(i)
 
     for row in range(len(adj_matrixtcmap)):
         ones_list = ut.fetch_ones_in_row(adj_matrixtcmap, row)
-        for i in ones_list:
-            # print(f"row:{row} i: {i}")
-            vals = [usid_list[row], tcid_list[i], next_id]
-            query = ut.insertquery_creation(ustcmap_tablename, cols, vals, dtype)
-            # print(f"query is : {query}")
-            ut_ds.running_insertquery(query)
+        print(f"ones_list: {ones_list}")
+        if ones_list is not None:
+            for i in ones_list:
+                print(f"row:{row} i: {i}")
+                print(f"usid_list[row]: {usid_list[row]}, tcid_list[i]: {tcid_list[i]}")
+                vals = [usid_list[row], tcid_list[i], next_id]
+                query = ut.insertquery_creation(ustcmap_tablename, cols, vals, dtype)
+                print(f"query is : {query}")
+                ut_ds.running_insertquery(query)
+        else:
+            continue
 
 
-def fillmappingtable_tcdefectsmap():
+def fillmappingtable_tcdefectsmap(adj_matrixdefectmap):
   print(adj_matrixdefectmap)
   cols = ['tc_id', 'defect_id', 'ds_id']
   dtype = ['str', 'str', 'str']
@@ -112,7 +125,7 @@ def fillmappingtable_tcdefectsmap():
     for i in ones_list:
       vals = [tcid_list[row], defectid_list[i], next_id]
       query = ut.insertquery_creation(tcdefectmap_tablename, cols, vals, dtype)
-      # print(f"query is : {query}")
+      print(f"query is : {query}")
       ut_ds.running_insertquery(query)
 
 
@@ -149,10 +162,16 @@ def fillmappingtable_uscmmap():
             ut_ds.running_insertquery(query)
 
 
-fillmappingtable_ustcmap()
-fillmappingtable_tcdefectsmap()
-fillmappingtable_uscmmap()
-ut.saving_config(configfilename, next_id)
+# adj_matrixtcmap, adj_matrixdefectmap = runningmats()
+# for i in adj_matrixtcmap:
+#     print(i)
+
+
+
+# fillmappingtable_ustcmap(adj_matrixtcmap)
+# fillmappingtable_tcdefectsmap(adj_matrixdefectmap)
+# fillmappingtable_uscmmap()
+# ut.saving_config(configfilename, next_id)
 
 
 

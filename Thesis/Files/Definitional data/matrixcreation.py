@@ -30,9 +30,10 @@ def generate_random_adjmat_withlimits(n,m,connection_prob,limit_ones):
 
     return adj_matrix
 
-def generate_adjmat_onetomany_withlimits(num_rows, num_columns, limiting_ones, connection_probability=1.0):
+def generate_adjmat_onetomany_withlimits(num_rows, num_columns, limiting_ones, connection_probability):
 
-
+    limiting_ones = int(num_columns/num_rows) + 1
+    print(f"limiting_ones: {limiting_ones}")
     # Initialize an empty adjacency matrix
     adjacency_matrix = [[0 for _ in range(num_columns)] for _ in range(num_rows)]
 

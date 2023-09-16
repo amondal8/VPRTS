@@ -52,7 +52,7 @@ config = configparser.ConfigParser()
 #   print(f"Wrong input for config_type == {config_type}")
 
 next_id = ut_ds.getds_id()
-print(f"ds_id: {next_id}")
+# print(f"ds_id: {next_id}")
 configfilename = ut.read_from_txt(inifilename_stored)
 config.read(configfilename)
 # print(configfilename)
@@ -115,6 +115,9 @@ def fillinsttable_usstory():
       usv_res.remove(i)
 
   usvlist_rel2 = random.sample(usv_res, uscount_r2)
+  print(f"next id: {next_id}")
+  print(f"len usr1: {len(usvlist_rel1)}")
+  print(f"len usr1: {len(usvlist_rel2)}")
   usplist_rel1 = ut.createlist_fromdbresult(usvlist_rel1, 0)
   usbvlist_rel1 = ut.createlist_fromdbresult(usvlist_rel1, 1)
   usplist_rel2 = ut.createlist_fromdbresult(usvlist_rel2, 0)
@@ -234,8 +237,15 @@ def insertingvalue_cminsttable(cmlist_final, tablename, cols, dtype):
     ut_ds.running_insertquery(query)
 
 
-fillinsttable_usstory()
-fillinsttable_testcase()
-fillinsttable_defectinsttable()
-fillinsttable_cminsttable()
-ut.saving_config(configfilename, next_id)
+def insertbusinessvalue(multiplier, addingfactor, ds_id):
+  query = f"""UPDATE userstory_datasettable
+              SET us_businessvalue = FLOOR(RAND() * {multiplier}) + {addingfactor}
+              WHERE ds_id = '{ds_id}';"""
+  ut_ds.running_insertquery(query)
+
+
+# fillinsttable_usstory()
+# fillinsttable_testcase()
+# fillinsttable_defectinsttable()
+# fillinsttable_cminsttable()
+# ut.saving_config(configfilename, next_id)

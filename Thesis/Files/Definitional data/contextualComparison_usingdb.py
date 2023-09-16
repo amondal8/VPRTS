@@ -19,7 +19,7 @@ worksheet1 = workbook["R1"]
 worksheet2 = workbook["R2"]
 worksheetMap = workbook["Mapping"]
 
-
+fielname_towritemat = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Definitional data/outputMat.txt"
 ustcmap_tablename = tablenames_config["ustcmap_tablename"]
 uscmmap_tablename = tablenames_config["uscmmap_tablename"]
 tcdefectmap_tablename = tablenames_config["tcdefectmap_tablename"]
@@ -140,7 +140,12 @@ def contentcomparison(ds_id, importanceval_calconfig):
             # **************************
 
     # print(f"User stories with cumulative value after similarity measure: {simvalue_dict}")
-
+    ut.writetonotepad('w', "", fielname_towritemat)
+    for i in mat:
+        ut.writetonotepad('a', str(i)+"\n", fielname_towritemat)
+    result_text = ut.read_from_txt(fielname_towritemat)
+    query_updateresults = ut.updatetable_query(dataset_tablename, "similarity_value", result_text, "str", ds_id)
+    ut_ds.running_insertquery(query_updateresults)
     impvalue_dict = ut_ds.importanceval_fortc(ds_id, mat, usr2_list, usr1_list, importanceval_calconfig)
     writematrix(workbook, mat, usr2_list, usr1_list)
     # simval_dict = ut_ds.simval_config(mat,usr1_list,usr2_list)
@@ -151,7 +156,7 @@ def contentcomparison(ds_id, importanceval_calconfig):
     #     print(i)
     # print(simvalue_dict)
     sorted_impvaldict = {k: v for k, v in sorted(impvalue_dict.items(), key=lambda item: item[1], reverse = True)}
-    print(f"sorted us_dict{sorted_impvaldict}")
+    print(f"sorted us_dict: {len(sorted_impvaldict)}{sorted_impvaldict}")
     return sorted_impvaldict
 
 # contentcomparison("1", "1.1")
