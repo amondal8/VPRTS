@@ -150,8 +150,8 @@ def fillmappingtable_uscmmap():
         matrix_build_configtype_uscm = run_config["matrix_build_configtype_uscm"]
         adj_uscmmap = matc.generate_custom_adjacency_matrix_uscm(len(usid_list), len(cmid_list), uscm_map_probthreshold, matrix_build_configtype_uscm)
     print(f"uscm Mat: ")
-    for r in adj_uscmmap:
-        print(r)
+    # for r in adj_uscmmap:
+    #     print(r)
     for row in range(len(adj_uscmmap)):
         nonzero_list = ut.fetch_nonzeros_in_row(adj_uscmmap, row)
         # print(nonzero_list)

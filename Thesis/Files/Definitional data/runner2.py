@@ -16,7 +16,6 @@ import utilities_dataset as ut_ds
 
 #
 def runner2(data):
-    dsid_list = []
     for i in data:
         fm.ds_id = i[0]
         fm.next_id = i[0]
@@ -33,8 +32,6 @@ def runner2(data):
         result = ut_ds.running_searchqury(query)
         print(len(result))
         ut_ds.readandwrite_toexcel(i[0], "D", len(result))
-    for i in data:
-        dsid_list.append(i[0])
-    print(f"dsid_list")
+
 
 # ut.saving_config(fd.configfilename, fd.next_id)

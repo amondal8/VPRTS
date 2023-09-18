@@ -140,14 +140,15 @@ def contentcomparison(ds_id, importanceval_calconfig):
             # **************************
 
     # print(f"User stories with cumulative value after similarity measure: {simvalue_dict}")
-    ut.writetonotepad('w', "", fielname_towritemat)
-    for i in mat:
-        ut.writetonotepad('a', str(i)+"\n", fielname_towritemat)
-    result_text = ut.read_from_txt(fielname_towritemat)
-    query_updateresults = ut.updatetable_query(dataset_tablename, "similarity_value", result_text, "str", ds_id)
-    ut_ds.running_insertquery(query_updateresults)
+    if importanceval_calconfig == "1.1":
+        ut.writetonotepad('w', "", fielname_towritemat)
+        for i in mat:
+            ut.writetonotepad('a', str(i)+"\n", fielname_towritemat)
+        result_text = ut.read_from_txt(fielname_towritemat)
+        query_updateresults = ut.updatetable_query(dataset_tablename, "similarity_value", result_text, "str", ds_id)
+        ut_ds.running_insertquery(query_updateresults)
     impvalue_dict = ut_ds.importanceval_fortc(ds_id, mat, usr2_list, usr1_list, importanceval_calconfig)
-    writematrix(workbook, mat, usr2_list, usr1_list)
+    # writematrix(workbook, mat, usr2_list, usr1_list)
     # simval_dict = ut_ds.simval_config(mat,usr1_list,usr2_list)
 
 

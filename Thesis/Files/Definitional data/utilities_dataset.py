@@ -301,7 +301,7 @@ def readandwrite_toexcel(readval, col, writeval):
   column = worksheet_res[readcol]
   for i in range(len(column)):
     cell = worksheet_res[f'{readcol}{i+1}']
-    if str(cell.value) == readval:
+    if str(cell.value) == str(readval):
       row = i+1
       break
   print(f"Row: {row}, col: {col}")

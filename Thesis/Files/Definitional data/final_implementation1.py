@@ -9,6 +9,7 @@ from datetime import datetime
 import pandas as pd
 import contextualComparison_usingdb as contcomp
 import creatingsubsets as createsubset
+import data as dt
 
 outputfilename = "output.txt"
 inifilename_stored = "inifile_name.txt"
@@ -48,10 +49,10 @@ next_id = ut_ds.getds_id()
 # if importanceval_calconfig not in ["1","2"]:
 #   importanceval_calconfig = "1"
 valuepreserved_col = ""
-importanceval_calconfig = ["1.1"]
-# ,"1.2","1.3","0"
-dsid_list = ["21"]
-total_executiontime_list = [4100,2500,360,1200,500,3000,1700]
+importanceval_calconfig = ["1.1","1.2","1.3","0"]
+#
+dsid_list = [99]
+total_executiontime_list = dt.exec_window
 
 
 # ,"1.2","1.3","0"
@@ -202,34 +203,39 @@ def saving_config(ds_id):
   ut_ds.insert_json_data(json_data, ds_id)
 
 for indi, i in enumerate(dsid_list):
-  ds_id_res = ds_id = i
+  ds_id_res = ds_id = str(i)
   total_executiontime = total_executiontime_list[indi]
   for j in importanceval_calconfig:
-    print(f"ds_id: {ds_id}, computation configuration: {j}, total execution window: {total_executiontime}")
-    us_dict = get_usdict(ds_id, j)
-    us_list = list(us_dict.keys())
-    tc_dict, tc_list = ut.copy_console('a', creation_tcsubset, us_dict, ds_id)
-    # sorted_tcdict = ut.copy_console('a',ut_ds.creating_prioritydict_tclist,tc_list, ds_id)
-    tcset_fixedexectime = ut.copy_console('a', createsubset.creatingtcset_fixedexecutiontime, tc_dict, total_executiontime, tcexectime_fixed)
-    ut_ds.readandwrite_toexcel(ds_id, "J", tcexectime_fixed)
-    ut_ds.readandwrite_toexcel(ds_id, "K", total_executiontime)
-    ut_ds.readandwrite_toexcel(ds_id, "L", len(tcset_fixedexectime))
-    value_preserved, totalvalue = ut.copy_console('a', measuring_valuepreserved, us_list, tcset_fixedexectime, ds_id)
-    ut_ds.readandwrite_toexcel(ds_id, "M", totalvalue)
-    if j == "1.1":
-      valuepreserved_col = "N"
-    elif j == "1.2":
-      valuepreserved_col = "O"
-    elif j == "1.3":
-      valuepreserved_col = "P"
-    elif j == "0":
-      valuepreserved_col = "Q"
-    ut_ds.readandwrite_toexcel(ds_id, valuepreserved_col, value_preserved)
-    tcset_fixedexectime_randomselection = ut.copy_console('a', runningalgo_fixedtime_randomselection, total_executiontime, tcexectime_fixed, us_list, ds_id)
-    print(tcset_fixedexectime_randomselection)
-    value_preserved_random, total_value = ut.copy_console('a', measuring_valuepreserved, us_list, tcset_fixedexectime_randomselection, ds_id)
-    ut_ds.readandwrite_toexcel(ds_id, "R", value_preserved_random)
-    saving_results(j, ds_id)
+    try:
+      print(f"ds_id: {ds_id}, computation configuration: {j}, total execution window: {total_executiontime}")
+      us_dict = get_usdict(ds_id, j)
+      us_list = list(us_dict.keys())
+      tc_dict, tc_list = ut.copy_console('a', creation_tcsubset, us_dict, ds_id)
+      # sorted_tcdict = ut.copy_console('a',ut_ds.creating_prioritydict_tclist,tc_list, ds_id)
+      tcset_fixedexectime = ut.copy_console('a', createsubset.creatingtcset_fixedexecutiontime, tc_dict, total_executiontime, tcexectime_fixed)
+      ut_ds.readandwrite_toexcel(ds_id, "J", tcexectime_fixed)
+      ut_ds.readandwrite_toexcel(ds_id, "K", total_executiontime)
+      ut_ds.readandwrite_toexcel(ds_id, "L", len(tcset_fixedexectime))
+      value_preserved, totalvalue = ut.copy_console('a', measuring_valuepreserved, us_list, tcset_fixedexectime, ds_id)
+      ut_ds.readandwrite_toexcel(ds_id, "M", totalvalue)
+      if j == "1.1":
+        valuepreserved_col = "N"
+      elif j == "1.2":
+        valuepreserved_col = "O"
+      elif j == "1.3":
+        valuepreserved_col = "P"
+      elif j == "0":
+        valuepreserved_col = "Q"
+      ut_ds.readandwrite_toexcel(ds_id, valuepreserved_col, value_preserved)
+      tcset_fixedexectime_randomselection = ut.copy_console('a', runningalgo_fixedtime_randomselection, total_executiontime, tcexectime_fixed, us_list, ds_id)
+      print(tcset_fixedexectime_randomselection)
+      value_preserved_random, total_value = ut.copy_console('a', measuring_valuepreserved, us_list, tcset_fixedexectime_randomselection, ds_id)
+      ut_ds.readandwrite_toexcel(ds_id, "R", value_preserved_random)
+      saving_results(j, ds_id)
+    except:
+      print(f"Problem faced while running ds_id: {i} so skipped")
+
+
 
 # tcexec_dict = ut.copy_console('a', createsubset.create_tcdict_exectime, tc_list, ds_id)  # Creating a dictionary where TC# is the key and its execution time is the value
 # print(f"sorted_tcdict {tc_dict}")
