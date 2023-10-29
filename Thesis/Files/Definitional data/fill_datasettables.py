@@ -102,6 +102,7 @@ def fillinsttable_usstory():
     if i in usid_res:
       usid_res.remove(i)
 
+
   uslist_rel2 = random.sample(usid_res,uscount_r2)
   usidlist_rel1 = ut.createlist_fromdbresult(uslist_rel1,0)
   usdesclist_rel1 = ut.createlist_fromdbresult(uslist_rel1,1)
@@ -117,7 +118,7 @@ def fillinsttable_usstory():
   usvlist_rel2 = random.sample(usv_res, uscount_r2)
   print(f"next id: {next_id}")
   print(f"len usr1: {len(usvlist_rel1)}")
-  print(f"len usr1: {len(usvlist_rel2)}")
+  print(f"len usr2: {len(usvlist_rel2)}")
   usplist_rel1 = ut.createlist_fromdbresult(usvlist_rel1, 0)
   usbvlist_rel1 = ut.createlist_fromdbresult(usvlist_rel1, 1)
   usplist_rel2 = ut.createlist_fromdbresult(usvlist_rel2, 0)
@@ -243,6 +244,17 @@ def insertbusinessvalue(multiplier, addingfactor, ds_id):
               WHERE ds_id = '{ds_id}';"""
   ut_ds.running_insertquery(query)
 
+def updatebv_userstory_datasetable(ds_id):
+  bv_list = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+  query = f"Select us_id from userstory_datasettable where ds_id = '{ds_id}'"
+  res = ut_ds.running_searchqury(query)
+  us_list = ut.createlist_fromdbresult(res, 0)
+  for j in us_list:
+    updatequery = f"""UPDATE userstory_datasettable
+                        SET us_businessvalue = {random.choice(bv_list)}
+                        WHERE ds_id = {ds_id} and us_id ={j}; """
+    ut_ds.running_insertquery(updatequery)
+  print(f"Business values updated for {ds_id}")
 
 # fillinsttable_usstory()
 # fillinsttable_testcase()

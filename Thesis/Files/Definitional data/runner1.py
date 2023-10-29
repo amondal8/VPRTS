@@ -45,6 +45,6 @@ def runner1(data):
         fd.fillinsttable_testcase()
         fd.fillinsttable_cminsttable()
         fd.fillinsttable_defectinsttable()
-        fd.insertbusinessvalue(i[6], i[6], i[0])
+        fd.updatebv_userstory_datasetable(i[0])
     #
         ut.saving_config(fd.configfilename, fd.next_id)

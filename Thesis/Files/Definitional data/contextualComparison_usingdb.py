@@ -3,6 +3,7 @@ import spacy
 import configparser
 import utilities as ut
 import utilities_dataset as ut_ds
+import calculating_distribution as cd
 
 
 filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
@@ -98,18 +99,49 @@ def contentcomparison(ds_id, importanceval_calconfig):
     usr2_res = ut_ds.running_searchqury(query_r2)
     usr1_list = ut.createlist_fromdbresult(usr1_res,0)
     usr2_list = ut.createlist_fromdbresult(usr2_res, 0)
-    maxr1 = len(usr1_res)
-    maxr2 = len(usr2_res)
-    mat = [[0 for i in range(maxr1)] for j in range(maxr2)]
+    query = f"Select similarity_value from dataset where ds_id = {ds_id}"
+    res_simval = ut_ds.running_searchqury(query)
+    if res_simval[0][0] is None:
+        maxr1 = len(usr1_res)
+        maxr2 = len(usr2_res)
+        mat = [[0 for i in range(maxr1)] for j in range(maxr2)]
 
-    for indi, i in enumerate(usr2_res):
-        for indj, j in enumerate(usr1_res):
-            simval = textsimilarity(i[1], j[1])
-            # print(f"us2: {i[0]}, us1: {j[0]} have sim value: {simval}")
-            if simval < 0:
-                simval = 0
-            mat[indi][indj] = simval
+        for indi, i in enumerate(usr2_res):
+            for indj, j in enumerate(usr1_res):
+                simval = textsimilarity(i[1], j[1])
+                # print(f"us2: {i[0]}, us1: {j[0]} have sim value: {simval}")
+                if simval < 0:
+                    simval = 0
+                mat[indi][indj] = simval
+        ut.writetonotepad('w', "", fielname_towritemat)
+        for i in mat:
+            ut.writetonotepad('a', str(i) + "\n", fielname_towritemat)
+        result_text = ut.read_from_txt(fielname_towritemat)
+        query_updateresults = ut.updatetable_query(dataset_tablename, "similarity_value", result_text, "str", ds_id)
+        ut_ds.running_insertquery(query_updateresults)
+        ut_ds.commitconnection()
+    elif res_simval[0][0] is not None:
+        if res_simval[0][0].strip(" ") == "":
+            maxr1 = len(usr1_res)
+            maxr2 = len(usr2_res)
+            mat = [[0 for i in range(maxr1)] for j in range(maxr2)]
 
+            for indi, i in enumerate(usr2_res):
+                for indj, j in enumerate(usr1_res):
+                    simval = textsimilarity(i[1], j[1])
+                    # print(f"us2: {i[0]}, us1: {j[0]} have sim value: {simval}")
+                    if simval < 0:
+                        simval = 0
+                    mat[indi][indj] = simval
+            ut.writetonotepad('w', "", fielname_towritemat)
+            for i in mat:
+                ut.writetonotepad('a', str(i) + "\n", fielname_towritemat)
+            result_text = ut.read_from_txt(fielname_towritemat)
+            query_updateresults = ut.updatetable_query(dataset_tablename, "similarity_value", result_text, "str", ds_id)
+            ut_ds.running_insertquery(query_updateresults)
+            ut_ds.commitconnection()
+        else:
+            mat = cd.convertstring_to_mat(ds_id)
             # ******************
 
             # if simval >= similarityval_threshold:
@@ -140,13 +172,7 @@ def contentcomparison(ds_id, importanceval_calconfig):
             # **************************
 
     # print(f"User stories with cumulative value after similarity measure: {simvalue_dict}")
-    if importanceval_calconfig == "1.1":
-        ut.writetonotepad('w', "", fielname_towritemat)
-        for i in mat:
-            ut.writetonotepad('a', str(i)+"\n", fielname_towritemat)
-        result_text = ut.read_from_txt(fielname_towritemat)
-        query_updateresults = ut.updatetable_query(dataset_tablename, "similarity_value", result_text, "str", ds_id)
-        ut_ds.running_insertquery(query_updateresults)
+
     impvalue_dict = ut_ds.importanceval_fortc(ds_id, mat, usr2_list, usr1_list, importanceval_calconfig)
     # writematrix(workbook, mat, usr2_list, usr1_list)
     # simval_dict = ut_ds.simval_config(mat,usr1_list,usr2_list)

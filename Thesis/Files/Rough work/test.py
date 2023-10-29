@@ -77,12 +77,12 @@ def generate_adjmat_onetomany_withconfig(num_rows, num_columns, limiting_ones, c
 # if all_present:
 #     print("all same")
 
-# animal =['donkey', 'monkey']
+# animal =['monkey']
 #
 # for i in range(50):
 #
-#     # pg.write(f'You are a {random.choice(animal)}')
-#     pg.write("I love u")
+#     pg.write(f'You are a {random.choice(animal)}')
+#     # pg.write("I love u")
 #     pg.press('enter')
 
 # import spacy
@@ -113,3 +113,188 @@ def generate_adjmat_onetomany_withconfig(num_rows, num_columns, limiting_ones, c
 #     # Print the similarity score
 #     print(f"Similarity Score: {similarity_score}")
 
+# import abc as ABC
+#
+# class parent(ABC.ABC):
+#     score = 5
+#
+#     # def __init__(self):
+#     #     pass
+#
+#     def __init__(selfie, *args, **kwargs):
+#         selfie.firstname = args
+#         selfie.lastname = kwargs
+#
+#     def display(self):
+#         score = 9
+#         print(f"The name of the student is {self.lastname}, {self.firstname} with score {score}")
+#
+#     @ABC.abstractmethod
+#     def noval(self):
+#         pass
+#
+# class child(parent):
+#     def noval(self):
+#         print("instantiated")
+#     # def my_method(self):
+#     #     self.display()
+#
+# # obj1 = parent("Anil", "Dev")
+# # obj2 = parent("Sunil", "Verma")
+# # obj1.display()
+# # obj2.display()
+# obj3 = child()
+# obj3.noval()
+
+# def example(*args):
+#     a,b,c=args
+#
+#
+# def example(a,b,c):
+#     print(a+b+c)
+#
+#
+# example(a=1,b=2)
+#
+# my_dict = dict()
+# my_set = set()
+# my_list = []
+# my_list.append(1)
+# print(my_list)
+
+# class Graph:
+#     def __init__(self):
+#        self.graph = {}
+#
+#     def edge(self,vertex,edge):
+#         if vertex in self.graph:
+#             self.graph[vertex].append(edge)
+#         else:
+#             self.graph[vertex] = [edge]
+#     def print_graph(self):
+#             print(self.graph)
+#
+#
+# class Tree:
+#     def __init__(self,value):
+#         self.value = value
+#         self.left_node = None
+#         self.right_node = None
+#
+# t = Tree(1)
+# t.right_node = Tree(3)
+# t.left_node = Tree(2)
+#
+# t.right_node.left_node = Tree(6)
+# t.right_node.right_node = Tree(7)
+#
+#
+# import time
+# import threading as Thread
+#
+#
+#
+#
+# time.sleep(1)
+#
+# g = Graph()
+# g.edge('A', 'B')
+# g.edge('A', 'C')
+# g.edge('B', 'C')
+# g.print_graph()
+#
+# li=[3,4,45]
+# li.insert(0,1)
+# li.append(98)
+# li.pop()
+# print(li)
+#
+# my_Set = set()
+#
+# def  insertion_sort(arr):
+#     for indi, i in enumerate(arr):
+#         min = i
+#         for j in range(indi+1, len(arr)):
+#             if arr[j]<min:
+#                 arr[j], arr[indi] = arr[indi], arr[j]
+#
+#     print(arr)
+#
+# arr = [2,3,5,6,-1]
+# insertion_sort(arr)
+
+# a = 1221
+# a_st = str(a)
+# reverse = a_st[len(a_st)::-1]
+# print(int(reverse))
+# if a == int(reverse):
+#     print("I am palindrome")
+# else:
+#     print("No")
+
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+#
+# # Your own list of numbers
+# your_numbers = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+#
+# # Generate additional numbers with an exponential distribution
+# additional_numbers = np.random.exponential(scale=2, size=len(your_numbers))
+#
+# # Combine the original list with the exponentially distributed numbers
+# transformed_numbers = your_numbers + additional_numbers
+#
+# print(transformed_numbers)
+# Plot the histograms
+# plt.hist(your_numbers, bins=20, alpha=0.5, label='Original Numbers', color='blue')
+# plt.hist(transformed_numbers, bins=20, alpha=0.5, label='Transformed Numbers', color='orange')
+# plt.legend()
+# plt.title('Original and Transformed Distributions')
+# plt.xlabel('Values')
+# plt.ylabel('Frequency')
+# plt.show()
+
+
+# a = .273123
+# print(format(a,'.5f'))
+#
+#
+# l = [1,2,3,4,5]
+# t = "ani"
+# print(t.find('ni')) #gives the start index or -1
+# print(t.index('a')) #gives the index or error
+# print('a' in t)     #gives true or false
+# print(t[::1])
+# print(t.upper())
+# l.insert(0,100)
+# print(l[::-1])
+# ap=l.copy()
+# print(ap)
+# print(ap.count(101))
+#
+# an = [x for x in l if x%2 == 0]
+# print(an)
+#
+# print(random.sample(l,3))
+
+
+# inp = [9,9,9,9,9]
+# inp[len(inp)-1]+=1
+#
+# for i in range(len(inp)-1,-1,-1):
+#     if inp[i] == 10 and i!= 0:
+#         inp[i] = 0
+#         inp[i-1] += 1
+#     if i == 0 and inp[i] == 10:
+#         inp[i] = 0
+#         inp.insert(0, 1)
+# print(inp)
+
+# ini = [1,2,3]
+# ini.insert(0,1)
+# print(ini)
+
+
+ls = {1:21,2:21}
+print(sum(ls.values())/len(ls))

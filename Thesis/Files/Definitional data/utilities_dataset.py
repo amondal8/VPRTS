@@ -24,9 +24,12 @@ mydb = mysql.connector.connect(
 filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 
-filepath_saveresults = "C:/Users/amondal8/Desktop/Aniruddha/Thesis/Datasets/My dataset/Results/Comparison against Random Selection.xlsx"
+filepath_saveresults = "C:/Users/amondal8/Desktop/Aniruddha/Thesis/Datasets/My dataset/Results/Comparison against Random Selection_run7.xlsx"
 workbook_res = op.load_workbook(filepath_saveresults)
-saveresults_sheetname = "RQ1_Run4"
+saveresults_sheetname = "RQ1_Run5+6+7"
+  # "Simval_Distds_id"
+
+  # "RQ1_Run4"
 
 
 def getds_id():
@@ -312,6 +315,22 @@ def readandwrite_toexcel(readval, col, writeval):
 
 def commitconnection():
   mydb.commit()
+
+def creatingset_fromstring(s):
+  new_set = set()
+  s = s.replace("{", "").replace("}", "").replace("'","")
+  s_list = s.split(",")
+  for i in s_list:
+    new_set.add(i.strip())
+  return new_set
+
+
+def creatingstring_fromlist(ls):
+  s = str(ls).replace("[", "").replace("]", "")
+  return s
+
+
+
 
 # read_result(1)
 # read_json(1)
