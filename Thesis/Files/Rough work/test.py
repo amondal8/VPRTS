@@ -295,6 +295,4 @@ def generate_adjmat_onetomany_withconfig(num_rows, num_columns, limiting_ones, c
 # ini.insert(0,1)
 # print(ini)
 
-
-ls = {1:21,2:21}
-print(sum(ls.values())/len(ls))
+import utilities_dataset

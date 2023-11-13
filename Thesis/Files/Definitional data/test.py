@@ -564,6 +564,47 @@ def generate_adjmat_onetomany_withconfig(num_rows, num_columns, limiting_ones, c
 #     print("Data Available")
 #     print(res[0][0])
 
+import utilities_dataset as ut_ds
+import utilities as ut
 
-s = "123"
-print(s.isalnum())
+
+def creating_valandwt(ds_id, rel_id = 1):
+    us_tc_dict = dict()
+    tccount_list = []
+    query1 = f"Select us_id, us_businessvalue from userstory_datasettable where ds_id='{ds_id}' and release_id = {rel_id} order by us_id"
+    print(query1)
+    us_res = ut_ds.running_searchqury(query1)
+    print(us_res)
+    us_list = ut.createlist_fromdbresult(us_res,0)
+    usbv_list = ut.createlist_fromdbresult(us_res,1)
+    print(us_list)
+    print(usbv_list)
+    query2 = f"Select us_id, Count(tc_id) from us_tc_map where ds_id={ds_id} and us_id in({str(us_list).replace('[','').replace(']','')}) group by us_id"
+    us_res1 = ut_ds.running_searchqury(query2)
+    for i in us_res1:
+        us_tc_dict[i[0]] = i[1]
+    print(us_tc_dict)
+
+    for i in us_list:
+        tccount_list.append(us_tc_dict[i])
+    print(tccount_list)
+
+    return usbv_list, tccount_list
+
+
+
+# Example usage
+# val = [60, 100, 120]  # The values of the items
+# wt = [10, 20, 30]  # The weights of the items
+W = 35  # The capacity of the knapsack
+#
+# print(ut_ds.knapsack_01(val, wt, W))
+
+usbv_list, tccount_list = creating_valandwt(210,1)
+print(ut_ds.knapsack_01(usbv_list, tccount_list, W))
+
+# li = [10]
+# li1 = [1,2,34]
+#
+# all_present = all(element in li1 for element in li)
+# print(all_present)

@@ -24,9 +24,11 @@ mydb = mysql.connector.connect(
 filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 
-filepath_saveresults = "C:/Users/amondal8/Desktop/Aniruddha/Thesis/Datasets/My dataset/Results/Comparison against Random Selection_run7.xlsx"
+filepath_saveresults = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Definitional data/My_results.xlsx"
 workbook_res = op.load_workbook(filepath_saveresults)
-saveresults_sheetname = "RQ1_Run5+6+7"
+saveresults_sheetname = "new"
+
+
   # "Simval_Distds_id"
 
   # "RQ1_Run4"
@@ -328,6 +330,29 @@ def creatingset_fromstring(s):
 def creatingstring_fromlist(ls):
   s = str(ls).replace("[", "").replace("]", "")
   return s
+
+def knapsack_01(values, weights, W):
+  # Number of items
+  n = len(values)
+
+  # Create a DP table to store results of subproblems
+  dp = [[0 for x in range(W + 1)] for y in range(n + 1)]
+
+  # Fill dp[][] in bottom-up manner
+  for i in range(1, n + 1):
+    for w in range(1, W + 1):
+      if weights[i - 1] <= w:
+        # Max of two cases:
+        # (1) nth item included
+        # (2) not included
+        dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1])
+      else:
+        # If the weight of the nth item is more than Knapsack of capacity w,
+        # then this item cannot be included in the optimal solution
+        dp[i][w] = dp[i - 1][w]
+
+  # Return the maximum value that can be put in a knapsack of capacity W
+  return dp[n][W]
 
 
 
