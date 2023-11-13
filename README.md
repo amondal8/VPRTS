@@ -1,4 +1,4 @@
-# MS-thesis: A value-preservig approach to RTS in Agile Methods.
+# MS-thesis: A value-preserving approach to RTS in Agile Methods.
 This thesis focuses on prioritizing existing user stories based on the textual similarity with new user stories and the business values before selecting the associated test cases for regression test selection (RTS) process.
 
 **Understanding the Database:**
