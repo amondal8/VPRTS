@@ -78,9 +78,9 @@ Below table describes all the methods used in final_implementation.py in details
 
 There are two ways in which the simulations can be run for thsi thesis using the provided codes:
 
-1. Process1: The simuations should be run using this process when you are building everything from scratch and non of the schemas are setup yet. This process may take longer time to be run than process 2 as it alos involves all the initial setup of the database.
+**1. Process1:** The simuations should be run using this process when you are building everything from scratch and non of the schemas are setup yet. This process may take longer time to be run than process 2 as it alos involves all the initial setup of the database.
 
-2. Process2: This is a suggested process if the definitionaldata schema is set and both the tables of this schema is filled with the initial data of user stories and test cases. This is a easier process and does not involve and configuration file. All the input data are fed through data.py file.
+**2. Process2:** This is a suggested process if the definitionaldata schema is set and both the tables of this schema is filled with the initial data of user stories and test cases. This is a easier process and does not involve and configuration file. All the input data are fed through data.py file.
 
 ### Process 1:
    
@@ -118,5 +118,22 @@ Following the steps should provide the results we obtained for this thesis.
 
 **Steps to be followed to run the simulations using process 2:**
 
+**Setting up the input data**
+
+1. All the input data should be provided to the data.py file. The variable "data" is a list of lists which takes in the input data from the user. The structure of the data variable should be [[List 1], [List 2],...,[List n]].
+2. Each list should have the following data in the given order: dataset id, # of user stories for prior release, # of user stories for current release, # of code modules, # of test cases, # of defects. The description of each data is shown in the below table:
+
+![image](https://github.com/amondal8/masters-thesis/assets/134355254/5d6b8cc4-7af4-451a-bdf7-3a6b49962dbe)
+
+3. To run the "finalimplementation1.py" the data should be set for the variables dsid_list, exec_window and importanceval_calconfig. The details of these variables have been provided in the below table:
 
 
+**Execution**
+
+Once the input data are set, the following steps should be followed to generate the results
+
+**Step1:** Run the "runner1.py" file. This creates a dataset using the provided dataset id (has to be unique) and fills up the following tables: "userstory_datasettable", "tc_datasettable". This also sets the business value for each user story using a random function which has right skewed distribution.
+
+**Step2:** Run the "runner2.py" file. This fills up the "us_tc_map" table based on an adjacency matrix which is computed everytime this file is run.
+
+**Step3:**  
