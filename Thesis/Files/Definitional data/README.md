@@ -1,4 +1,4 @@
-**Readme for Definitional data dierctory**
+# Readme for Definitional data directory
 
 This folder contains all the research artifacts of my thesis. All the python files are placed in the root folder (Thesis/Files/Definitional data) and the thesis writeup, the results obtained from the simulations and the .sql file containing the structure and data the database created are placed in the folder "Addtional Files" (Thesis/Files/Definitional data/Additional Files).
 
