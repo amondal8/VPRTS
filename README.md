@@ -6,7 +6,7 @@ This thesis focuses on prioritizing existing user stories based on the textual s
 
 The results of this thesis (.xlsx), my thesis writeup (pdf) and the .sql file containing the created database can be found in : **Thesis/Files/Definitional data/Additional Files**
 
-**Understanding the Database:**
+## Understanding the Database:
 The user stories have been extracted from the TAWOS dataset (https://github.com/SOLAR-group/TAWOS) and the remaining data have been synthesized. We have used two schemas while creating the data and storing the results. Below are the specifications of the schemas:
 
 **1. Definitionaldata:** This schema is used to store the initial data before creating any specific datasets.
@@ -28,7 +28,7 @@ The field names are self explanatory but the filed names of dataset table may be
 
 
 
-**Understanding the Codebase:**
+## Understanding the Codebase:
 
 **1. Creating the tables:**
 All the tables for both the schemas have been created using our python codes. This action can also be done without the use of any programming code using MySQLWorkbench (https://www.mysql.com/products/workbench/) or any similar tool. Below is the table to showcase the python files used and their purpose:
@@ -74,8 +74,17 @@ Below table describes all the methods used in final_implementation.py in details
 
 ![image](https://github.com/amondal8/marters-thesis/assets/134355254/010d269c-385d-4c86-be8f-2bf56997319f)
 
+## Running the Simulations:
 
-**Steps to be followed to run the simulations:**
+There are two ways in which the simulations can be run for thsi thesis using the provided codes:
+
+1. Process1: The simuations should be run using this process when you are building everything from scratch and non of the schemas are setup yet. This process may take longer time to be run than process 2 as it alos involves all the initial setup of the database.
+
+2. Process2: This is a suggested process if the definitionaldata schema is set and both the tables of this schema is filled with the initial data of user stories and test cases. This is a easier process and does not involve and configuration file. All the input data are fed through data.py file.
+
+### Process 1:
+   
+**Steps to be followed to run the simulations using process 1:**
 
 The above processes have been mentioned in a chronological order which has to be followed in order to run the simulations and replicate the results of this thesis. Following are the steps revisited for better understanding.
 
@@ -98,5 +107,16 @@ The above processes have been mentioned in a chronological order which has to be
 **Step8:** Once all the tables are filled run the final_implementation1.py to fetch the results onto the dataset table and the desired .xlsx file.
 
 Following the steps should provide the results we obtained for this thesis.
+
+### Process 2:
+
+**Pre-requisites:**
+
+1. All the tables should already created in their respective schemas.
+
+2. Both the tables (userstory, testcase) in definitionaldata schema should already be filled with the required data.
+
+**Steps to be followed to run the simulations using process 2:**
+
 
 
