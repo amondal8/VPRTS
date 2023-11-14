@@ -106,9 +106,9 @@ The above processes have been mentioned in a chronological order which has to be
 
 **Step8:** Once all the tables are filled run the final_implementation1.py to fetch the results onto the dataset table and the desired .xlsx file.
 
-Following the steps should provide the results we obtained for this thesis.
+Following the above steps should provide the results using our RTS approach.
 
-### Process 2:
+### Process 2: **(Recommended process)**
 
 **Pre-requisites:**
 
@@ -118,17 +118,23 @@ Following the steps should provide the results we obtained for this thesis.
 
 **Steps to be followed to run the simulations using process 2:**
 
-**Setting up the input data**
+**Setting up the input data:**
 
 1. All the input data should be provided to the data.py file. The variable "data" is a list of lists which takes in the input data from the user. The structure of the data variable should be [[List 1], [List 2],...,[List n]].
 2. Each list should have the following data in the given order: dataset id, # of user stories for prior release, # of user stories for current release, # of code modules, # of test cases, # of defects. The description of each data is shown in the below table:
 
 ![image](https://github.com/amondal8/masters-thesis/assets/134355254/5d6b8cc4-7af4-451a-bdf7-3a6b49962dbe)
 
-3. To run the "finalimplementation1.py" the data should be set for the variables dsid_list, exec_window and importanceval_calconfig. The details of these variables have been provided in the below table:
+3. To run the "finalimplementation1.py" the data should be set for the variables dsid_list, exec_window and importanceval_calconfig in the data.py file. The details of these variables have been provided in the below table:
+
+![image](https://github.com/amondal8/masters-thesis/assets/134355254/5d40773d-0c44-44cd-9986-320c250bc4bd)
+
+The configuration terms used in the program is different from that used in the thesis. Below is the table to understand the corresponding terms:
+
+![image](https://github.com/amondal8/masters-thesis/assets/134355254/3eb5125f-fca9-4bf1-81c2-1b2900e6b4dd)
 
 
-**Execution**
+**Execution:**
 
 Once the input data are set, the following steps should be followed to generate the results
 
@@ -136,4 +142,6 @@ Once the input data are set, the following steps should be followed to generate 
 
 **Step2:** Run the "runner2.py" file. This fills up the "us_tc_map" table based on an adjacency matrix which is computed everytime this file is run.
 
-**Step3:**  
+**Step3:** Run the "finalimplementation1.py" file. This will compute the results and store it in the dataset table against each dataset id and also export the reults to the desired .xlsx file. The file name and path for exporting the results can be controlled using the variable "filepath_saveresults" from the "utilities_dataset.py" file
+
+Following the above steps should provide the results using our approach.
