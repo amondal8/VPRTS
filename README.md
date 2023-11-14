@@ -1,9 +1,12 @@
 # MS-thesis: A value-preserving approach to RTS in Agile Methods.
+
+Anyone willing to use this work should email and get a confirmation from: Aniruddha Mondal: amondal8@asu.edu or Dr. Kevin Gary: kgary@asu.edu
+
 This thesis focuses on prioritizing existing user stories based on the textual similarity with new user stories and the business values before selecting the associated test cases for regression test selection (RTS) process. **Follow the folder "Definitional data" to access all the required files.**
 
-The results of this thesis and the .sql containing the created database can be found in : **Thesis/Files/Definitional data/Additional Files**
+The results of this thesis (.xlsx), my thesis writeup (pdf) and the .sql file containing the created database can be found in : **Thesis/Files/Definitional data/Additional Files**
 
-**Understanding the Database:**
+## Understanding the Database:
 The user stories have been extracted from the TAWOS dataset (https://github.com/SOLAR-group/TAWOS) and the remaining data have been synthesized. We have used two schemas while creating the data and storing the results. Below are the specifications of the schemas:
 
 **1. Definitionaldata:** This schema is used to store the initial data before creating any specific datasets.
@@ -25,7 +28,7 @@ The field names are self explanatory but the filed names of dataset table may be
 
 
 
-**Understanding the Codebase:**
+## Understanding the Codebase:
 
 **1. Creating the tables:**
 All the tables for both the schemas have been created using our python codes. This action can also be done without the use of any programming code using MySQLWorkbench (https://www.mysql.com/products/workbench/) or any similar tool. Below is the table to showcase the python files used and their purpose:
@@ -71,8 +74,17 @@ Below table describes all the methods used in final_implementation.py in details
 
 ![image](https://github.com/amondal8/marters-thesis/assets/134355254/010d269c-385d-4c86-be8f-2bf56997319f)
 
+## Running the Simulations:
 
-**Steps to be followed to run the simulations:**
+There are two ways in which the simulations can be run for thsi thesis using the provided codes:
+
+**1. Process1:** The simuations should be run using this process when you are building everything from scratch and non of the schemas are setup yet. This process may take longer time to be run than process 2 as it alos involves all the initial setup of the database.
+
+**2. Process2:** This is a suggested process if the definitionaldata schema is set and both the tables of this schema is filled with the initial data of user stories and test cases. This is a easier process and does not involve and configuration file. All the input data are fed through data.py file.
+
+### Process 1:
+   
+**Steps to be followed to run the simulations using process 1:**
 
 The above processes have been mentioned in a chronological order which has to be followed in order to run the simulations and replicate the results of this thesis. Following are the steps revisited for better understanding.
 
@@ -94,6 +106,42 @@ The above processes have been mentioned in a chronological order which has to be
 
 **Step8:** Once all the tables are filled run the final_implementation1.py to fetch the results onto the dataset table and the desired .xlsx file.
 
-Following the steps should provide the results we obtained for this thesis.
+Following the above steps should provide the results using our RTS approach.
+
+### Process 2: **(Recommended process)**
+
+**Pre-requisites:**
+
+1. All the tables should already created in their respective schemas.
+
+2. Both the tables (userstory, testcase) in definitionaldata schema should already be filled with the required data.
+
+**Steps to be followed to run the simulations using process 2:**
+
+**Setting up the input data:**
+
+1. All the input data should be provided to the data.py file. The variable "data" is a list of lists which takes in the input data from the user. The structure of the data variable should be [[List 1], [List 2],...,[List n]].
+2. Each list should have the following data in the given order: dataset id, # of user stories for prior release, # of user stories for current release, # of code modules, # of test cases, # of defects. The description of each data is shown in the below table:
+
+![image](https://github.com/amondal8/masters-thesis/assets/134355254/5d6b8cc4-7af4-451a-bdf7-3a6b49962dbe)
+
+3. To run the "finalimplementation1.py" the data should be set for the variables dsid_list, exec_window and importanceval_calconfig in the data.py file. The details of these variables have been provided in the below table:
+
+![image](https://github.com/amondal8/masters-thesis/assets/134355254/5d40773d-0c44-44cd-9986-320c250bc4bd)
+
+The configuration terms used in the program is different from that used in the thesis. Below is the table to understand the corresponding terms:
+
+![image](https://github.com/amondal8/masters-thesis/assets/134355254/3eb5125f-fca9-4bf1-81c2-1b2900e6b4dd)
 
 
+**Execution:**
+
+Once the input data are set, the following steps should be followed to generate the results
+
+**Step1:** Run the "runner1.py" file. This creates a dataset using the provided dataset id (has to be unique) and fills up the following tables: "userstory_datasettable", "tc_datasettable". This also sets the business value for each user story using a random function which has right skewed distribution.
+
+**Step2:** Run the "runner2.py" file. This fills up the "us_tc_map" table based on an adjacency matrix which is computed everytime this file is run.
+
+**Step3:** Run the "finalimplementation1.py" file. This will compute the results and store it in the dataset table against each dataset id and also export the reults to the desired .xlsx file. The file name and path for exporting the results can be controlled using the variable "filepath_saveresults" from the "utilities_dataset.py" file
+
+Following the above steps should provide the results using our approach.
