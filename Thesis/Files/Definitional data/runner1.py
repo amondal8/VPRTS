@@ -2,10 +2,6 @@ import time
 import utilities as ut
 import utilities_dataset as ut_ds
 import config_initialsetup as inisetup
-import fill_mappingtables as fm
-
-
-# time.sleep(10)
 import fill_datasettables as fd
 
 
