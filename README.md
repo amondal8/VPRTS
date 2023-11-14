@@ -1,7 +1,10 @@
 # MS-thesis: A value-preserving approach to RTS in Agile Methods.
+
+Anyone willing to use this work should email and get a confirmation from: Aniruddha Mondal: amondal8@asu.edu or Dr. Kevin Gary: kgary@asu.edu
+
 This thesis focuses on prioritizing existing user stories based on the textual similarity with new user stories and the business values before selecting the associated test cases for regression test selection (RTS) process. **Follow the folder "Definitional data" to access all the required files.**
 
-The results of this thesis and the .sql containing the created database can be found in : **Thesis/Files/Definitional data/Additional Files**
+The results of this thesis (.xlsx), my thesis writeup (pdf) and the .sql file containing the created database can be found in : **Thesis/Files/Definitional data/Additional Files**
 
 **Understanding the Database:**
 The user stories have been extracted from the TAWOS dataset (https://github.com/SOLAR-group/TAWOS) and the remaining data have been synthesized. We have used two schemas while creating the data and storing the results. Below are the specifications of the schemas:
