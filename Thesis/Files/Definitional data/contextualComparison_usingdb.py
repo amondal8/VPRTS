@@ -6,7 +6,7 @@ import utilities_dataset as ut_ds
 import calculating_distribution as cd
 
 
-filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 config = configparser.ConfigParser()
 config.read('config1.ini')
 dbconnect = config['dbconnection_dataset']
@@ -14,7 +14,7 @@ data = config['data']
 tablenames_config = config['tablenames']
 
 model1 = "en_core_web_lg"
-filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 worksheet1 = workbook["R1"]
 worksheet2 = workbook["R2"]

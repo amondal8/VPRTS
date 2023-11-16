@@ -8,7 +8,7 @@ import matrixcreation as matc
 import defectmapping as defmap
 
 
-filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 df = pd.read_excel(filepath)
 workbook = op.load_workbook(filepath)
 config = configparser.ConfigParser()

@@ -9,7 +9,7 @@ import defectmapping as defmap
 import contextualComparison_final as contcomp
 import creatingsubsets as createsubset
 
-filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 config = configparser.ConfigParser()
 config.read('config.ini')
 dbconnect = config['dbconnection']

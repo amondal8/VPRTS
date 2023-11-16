@@ -1,7 +1,7 @@
 import numpy as np
 import openpyxl as op
 
-filepath= "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+filepath= "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 worksheetReq = workbook["Req_Mapping"]
 worksheetR1 = workbook["R1"]

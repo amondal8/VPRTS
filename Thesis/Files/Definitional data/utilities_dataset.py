@@ -21,7 +21,7 @@ mydb = mysql.connector.connect(
 
 
 
-filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 
 filepath_saveresults = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Definitional data/My_results.xlsx"

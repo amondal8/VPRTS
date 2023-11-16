@@ -2,7 +2,7 @@ import openpyxl as op
 import spacy
 
 model1 = "en_core_web_lg"
-filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 worksheet1 = workbook["R1"]
 worksheet2 = workbook["R2"]

@@ -2,7 +2,7 @@ import numpy as np
 import openpyxl as op
 import random
 
-filepath = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Database Creation/Mapping.xlsx"
+filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 total_uscount=10
 total_tccount=20
 connection_prob=1   # Using a value less than 1 will decrease the 1s even more, so use it wisely
