@@ -2,7 +2,9 @@
 
 Anyone willing to use this work should email and get a confirmation from: Aniruddha Mondal: amondal8@asu.edu or Dr. Kevin Gary: kgary@asu.edu
 
-This thesis focuses on prioritizing existing user stories based on the textual similarity with new user stories and the business values before selecting the associated test cases for regression test selection (RTS) process. **Follow the folder "Definitional data" to access all the required files.**
+This thesis focuses on prioritizing existing user stories based on the textual similarity with new user stories and the business values before selecting the associated test cases for regression test selection (RTS) process. 
+
+Follow the folder **"Thesis/Files/Definitional data"** to access all the required files.
 
 The results of this thesis (.xlsx), my thesis writeup (pdf) and the .sql file containing the created database can be found in : **Thesis/Files/Definitional data/Additional Files**
 
