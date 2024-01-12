@@ -5,7 +5,7 @@ import utilities as ut
 import utilities_dataset as ut_ds
 import calculating_distribution as cd
 
-
+#Add your credentials/path
 filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 config = configparser.ConfigParser()
 config.read('config1.ini')
@@ -14,12 +14,14 @@ data = config['data']
 tablenames_config = config['tablenames']
 
 model1 = "en_core_web_lg"
+#Add your credentials/path
 filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 worksheet1 = workbook["R1"]
 worksheet2 = workbook["R2"]
 worksheetMap = workbook["Mapping"]
 
+#Add your credentials/path
 fielname_towritemat = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Definitional data/outputMat.txt"
 ustcmap_tablename = tablenames_config["ustcmap_tablename"]
 uscmmap_tablename = tablenames_config["uscmmap_tablename"]

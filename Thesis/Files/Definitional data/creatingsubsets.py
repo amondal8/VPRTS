@@ -2,7 +2,11 @@ import numpy as np
 import openpyxl as op
 import utilities_dataset as ut_ds
 import utilities as ut
+import openpyxl as op
+import utilities_dataset as ut_ds
+import utilities as ut
 
+#Add your credentials/path
 filepath= "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 worksheetReq = workbook["Req_Mapping"]

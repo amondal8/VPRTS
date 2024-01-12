@@ -5,8 +5,10 @@ import utilities as ut
 from datetime import datetime
 import pandas as pd
 import matrixcreation as matc
+from datetime import datetime
+import matrixcreation as matc
 
-
+#Add your credentials/path
 filepath= "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 df = pd.read_excel(filepath)
 workbook = op.load_workbook(filepath)

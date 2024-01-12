@@ -13,7 +13,10 @@ import data as dt
 
 outputfilename = "output.txt"
 inifilename_stored = "inifile_name.txt"
+
+#Add your credentials/path
 filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
+
 config = configparser.ConfigParser()
 configfilename = ut.read_from_txt(inifilename_stored)
 config.read(configfilename)
