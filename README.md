@@ -8,6 +8,11 @@ Follow the folder **"Thesis/Files/Definitional data"** to access all the require
 
 The results of this thesis (.xlsx), my thesis writeup (pdf) and the .sql file containing the created database can be found in : **Thesis/Files/Definitional data/Additional Files**
 
+There are two total of three .sql files in the that folder.
+Mydataset - This sql file would import all the data without segregating them on the basis on definational and dataset schema.
+definational_data - This sql will import definational data and its table.
+dataset_schema - This sql will import dataset schema and tables.
+
 ## Understanding the Database:
 The user stories have been extracted from the TAWOS dataset (https://github.com/SOLAR-group/TAWOS) and the remaining data have been synthesized. We have used two schemas while creating the data and storing the results. Below are the specifications of the schemas:
 
