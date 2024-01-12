@@ -145,6 +145,12 @@ The configuration terms used in the program is different from that used in the t
 
 Once the input data are set, the following steps should be followed to generate the results
 
+**Recommendation:** - This is higly recommended that you use a virtula enviornment and install the required dependecies that are present in the requirments.txt file in (Thesis folder) before the execution.
+Quick Commands - 
+1.source .venv/bin/activate
+2.python3 -m pip install -r requirements.txt
+3.Link to refer - https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
+
 **Step1:** Run the "runner1.py" file. This creates a dataset using the provided dataset id (has to be unique) and fills up the following tables: "userstory_datasettable", "tc_datasettable". This also sets the business value for each user story using a random function which has right skewed distribution.
 
 **Step2:** Run the "runner2.py" file. This fills up the "us_tc_map" table based on an adjacency matrix which is computed everytime this file is run.
