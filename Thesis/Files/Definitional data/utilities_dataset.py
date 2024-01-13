@@ -20,10 +20,11 @@ mydb = mysql.connector.connect(
 )
 
 
-
+#Add your credentials/path
 filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 
+#Add your credentials/path
 filepath_saveresults = "C:/Users/amondal8/PycharmProjects/pythonProject3/Thesis/Files/Definitional data/My_results.xlsx"
 workbook_res = op.load_workbook(filepath_saveresults)
 saveresults_sheetname = "new"

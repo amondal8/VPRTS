@@ -2,6 +2,7 @@ import numpy as np
 import openpyxl as op
 import random
 
+#Add your credentials/path
 filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 total_uscount=10
 total_tccount=20

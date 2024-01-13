@@ -20,6 +20,7 @@ mydb = mysql.connector.connect(
   database=dbconnect["database"]
 )
 
+#Add your credentials/path
 filepath= "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 
