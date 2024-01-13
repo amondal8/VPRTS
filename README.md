@@ -147,14 +147,15 @@ Once the input data are set, the following steps should be followed to generate 
 
 **Recommendation:** - This is higly recommended that you use a virtula enviornment and install the required dependecies that are present in the requirments.txt file in (Thesis folder) before the execution.
 Quick Commands - 
-1.source .venv/bin/activate
-2.python3 -m pip install -r requirements.txt
-3.Link to refer - https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
+1.python3 -m venv env
+2.source env/bin/activate
+3.python3 -m pip install -r requirements.txt
+Link to refer - https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
 
 **Step1:** Run the "runner1.py" file. This creates a dataset using the provided dataset id (has to be unique) and fills up the following tables: "userstory_datasettable", "tc_datasettable". This also sets the business value for each user story using a random function which has right skewed distribution.
 
 **Step2:** Run the "runner2.py" file. This fills up the "us_tc_map" table based on an adjacency matrix which is computed everytime this file is run.
 
-**Step3:** Run the "finalimplementation1.py" file. This will compute the results and store it in the dataset table against each dataset id and also export the reults to the desired .xlsx file. The file name and path for exporting the results can be controlled using the variable "filepath_saveresults" from the "utilities_dataset.py" file
+**Step3:** Run the "final_implementation1.py" file. This will compute the results and store it in the dataset table against each dataset id and also export the reults to the desired .xlsx file. The file name and path for exporting the results can be controlled using the variable "filepath_saveresults" from the "utilities_dataset.py" file
 
 Following the above steps should provide the results using our approach.

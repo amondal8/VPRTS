@@ -9,6 +9,7 @@ import defectmapping as defmap
 import contextualComparison_final as contcomp
 import creatingsubsets as createsubset
 
+#Add your credentials/path
 filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 config = configparser.ConfigParser()
 config.read('config.ini')

@@ -7,7 +7,7 @@ import pandas as pd
 import matrixcreation as matc
 import defectmapping as defmap
 
-
+#Add your credentials/path
 filepath = "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 df = pd.read_excel(filepath)
 workbook = op.load_workbook(filepath)

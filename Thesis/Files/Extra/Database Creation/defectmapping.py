@@ -2,6 +2,7 @@ import numpy as np
 import openpyxl as op
 import random
 
+#Add your credentials/path
 filepath= "/Thesis/Files/Extra/Database Creation/Mapping.xlsx"
 workbook = op.load_workbook(filepath)
 worksheetDef = workbook["Defect_Mapping"]
