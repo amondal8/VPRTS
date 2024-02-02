@@ -1,4 +1,4 @@
-# MS-thesis: A value-preserving approach to RTS in Agile Methods.
+# A value-preserving approach to RTS in Agile Methods.
 
 Anyone willing to use this work should email and get a confirmation from: Aniruddha Mondal: amondal8@asu.edu or Dr. Kevin Gary: kgary@asu.edu
 
