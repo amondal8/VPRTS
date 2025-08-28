@@ -1,10 +1,8 @@
-# MS-thesis: A value-preserving approach to RTS in Agile Methods.
+Business Value Driven Regression Testing for Agile Methods
 
-Anyone willing to use this work should email and get a confirmation from: Aniruddha Mondal: amondal8@asu.edu or Dr. Kevin Gary: kgary@asu.edu
+Anyone willing to use this work should email and get a confirmation from: Aniruddha Mondal: amondal8@asu.edu or Dr. Kevin Gary: kgary@asu.edu or Suddhasvatta Das: sdas76@asu.edu
 
-This thesis focuses on prioritizing existing user stories based on the textual similarity with new user stories and the business values before selecting the associated test cases for regression test selection (RTS) process. 
-
-Follow the folder **"Thesis/Files/Definitional data"** to access all the required files.
+This work focuses on prioritizing user stories based on the textual similarity with new user stories and the business values before selecting the associated test cases for regression test selection (RTS) process. 
 
 The results of this thesis (.xlsx), my thesis writeup (pdf) and the .sql file containing the created database can be found in : **Thesis/Files/Definitional data/Additional Files**
 
@@ -83,7 +81,7 @@ Below table describes all the methods used in final_implementation.py in details
 
 ## Running the Simulations:
 
-There are two ways in which the simulations can be run for thsi thesis using the provided codes:
+There are two ways in which the simulations can be run for this work using the provided codes:
 
 **1. Process1:** The simuations should be run using this process when you are building everything from scratch and non of the schemas are setup yet. This process may take longer time to be run than process 2 as it alos involves all the initial setup of the database.
 
@@ -93,7 +91,7 @@ There are two ways in which the simulations can be run for thsi thesis using the
    
 **Steps to be followed to run the simulations using process 1:**
 
-The above processes have been mentioned in a chronological order which has to be followed in order to run the simulations and replicate the results of this thesis. Following are the steps revisited for better understanding.
+The above processes have been mentioned in a chronological order which has to be followed in order to run the simulations and replicate the results of this work. Following are the steps revisited for better understanding.
 
 **Step1:** Extract the textual content (user story description) from the TAWOS dataset and place it on an .xlsx file which will be used to import these to our database.
 
@@ -136,7 +134,7 @@ Following the above steps should provide the results using our RTS approach.
 
 ![image](https://github.com/amondal8/masters-thesis/assets/134355254/5d40773d-0c44-44cd-9986-320c250bc4bd)
 
-The configuration terms used in the program is different from that used in the thesis. Below is the table to understand the corresponding terms:
+The configuration terms used in the program is different from that used in the work. Below is the table to understand the corresponding terms:
 
 ![image](https://github.com/amondal8/masters-thesis/assets/134355254/3eb5125f-fca9-4bf1-81c2-1b2900e6b4dd)
 
